@@ -9,6 +9,7 @@
 打开chrome或edge浏览器，分别打开chrome://inspect或者edge://inspect  
 打开小猿口算app，打开口算pk，回到浏览器的inspect页面，等待显示出pk链接调试按钮，点击调试。  
 开发者工具的网络页面选择保留日志。然后左上角刷新页面以确保获取到完整数据。每打开一个页面回到inspect页面等待获取到新的调试链接，在新的调试页面刷新页面。  
+[查看视频](./video/webview.mp4)
 
 # 进度
 获取pk试题及答案，提交答案主要在`exercise.ts`文件里  
