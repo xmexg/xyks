@@ -1,61 +1,20 @@
-# 小猿口算
-未完成的逆向笔记  
-vue逆向笔记 [frida/readme.md](frida/readme.md)  
-sign逆向笔记 [frida/hook_JsBridgeBean_sign.js](frida/hook_JsBridgeBean_sign.js)
+# sign加密分析
+- sign本身不在vue页面里,而是在vue使用solar通过sendToNative方法传给apk内置的方法生成url参数,再传回vue里发请求,见[detail_requestConfig.md](detail_requestConfig.md)  
 
-# 目录说明
-|||
-|--|--|
-|dexdump|使用frida-dexdump导出的dex|
-|frida|用到的一些脚本和逆向笔记|
-|har|在虚拟机抓到的包|
-|java_test|一点java测试|
+- 虽然dexdump文件夹放置了使用frida-dexdump导出了dex,但是jadx逆向发现直接逆向apk得到的效果更好  
 
-# 如何复现
+# frida注入
+使用以下命令注入现有的sign测试脚本
+```
+frida -U -n 小猿口算 -l hook_JsBridgeBean_sign.js
+```
 
-## webview复现
-+ windows:  
-    安装mumu模拟器，根据mumu官方教程，依次安装magisk，lsposed，算法助手。  
-
-    安装小猿口算app，在算法助手里设置小猿口算app允许webview远程调试。  
-
-    打开chrome或edge浏览器，分别打开chrome://inspect或者edge://inspect  
-
-    打开小猿口算app，打开口算pk，回到浏览器的inspect页面，等待显示出pk链接调试按钮，点击调试。  
-
-    开发者工具的网络页面选择保留日志。然后左上角刷新页面以确保获取到完整数据。每打开一个页面回到inspect页面等待获取到新的调试链接，在新的调试页面刷新页面。  
-    [查看视频](./video/webview.mp4)
-
-## frida复现
-+ windows:  
-    安装mumu模拟器, 根据mumu官方教程, 开启root  
-
-    去[frida仓库](https://github.com/frida/frida/releases)下载`frida-server-版本号-android-x86_64.xz`并解压  
-
-    把解压后的frida-server推送到模拟器任意目录,比如通过`adb push`推送到`/data/local`目录下  
-
-    连接到模拟器终端使用root启动frida-server,比如`adb shell, su, /data/local/frida-server-文件名`  
-
-    电脑安装frida和frida-tools
-    ```
-    pip install frida-tools
-    pip install frida
-    ```
-
-    电脑命令行向小猿口算注入xx脚本`frida -U -n 小猿口算 -l .\hook_JsBridgeBean_sign.js`
-
-
-# 进度
-## 正在解`sign`  
-获取pk试题及答案，提交答案主要在`exercise.ts`文件里  
-生成请求参数位于`request.ts`文件里  
-跟踪`signUrlIfNeeded`方法，一路跟踪发现使用`solar`让安卓程序生成sign再把url带参数传回来  
-
-+ 使用`anay_webview.js`能看到传递和调用链  
+# 算法分析
+- 注入[anay_webview.js](anay_webview.js)分析调用链
 ```sh
-cd frida
 frida -U -n 小猿口算 -l anay_webview.js
 ```
+发现如下输出:
 ```js
 WebView loading URL: javascript:(window.requestConfig_callback_1728561502343_17 && window.requestConfig_callback_1728561502343_17("W251bGxd
 "))
@@ -98,8 +57,7 @@ WebView loading URL: javascript:(window.requestConfig_1728561502343_16 && window
         at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1091)
 ```
 
-+ 使用[frida-dexdump](https://github.com/hluwa/frida-dexdump)  
-```
-frida-dexdump -FU
-```
-frida-dexdump导出的[dex](frida/dexdump/小猿口算),拖到jadx窗口逆向
+- jadx查看`com.yuanfudao.android.common.webview.base.JsBridgeBea`
+![sign1](/frida/image/sign1.png)  
+
+详见[hook_JsBridgeBean_sign.js](hook_JsBridgeBean_sign.js)
