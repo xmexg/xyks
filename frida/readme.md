@@ -197,9 +197,33 @@ const showToast = throttle((msg) => {
   window.VUE_APP && window.VUE_APP.showToast && window.VUE_APP.showToast(msg)
 }, 1000, { trailing: false })
 
-export const signUrlIfNeeded = (url: string) => {
+/**
+ * isYuanKouSuan：
+  在webpack://leo-web-oral-pk/node_modules/@solar/common-utils/lib/utils/DeviceUtil.js里有写，仅仅是检查UA里有没有YuanSouTiKouSuan指定字符
+  export var isYuanKouSuan = function () { return testUa('YuanSouTiKouSuan'); };
+
+ * runUniqueApi：
+ 在webpack://leo-web-oral-pk/node_modules/@solar/webview/lib/index.js
+  export var runUniqueApi = function (name, params, namespace) {
+      if (namespace === void 0) { namespace = ''; }
+      if (params.callback) {
+          params.trigger = params.callback;
+      }
+      execWithCallback(name, {
+          V0: V0,
+          oldValidParams: {
+              params: params
+          }
+      }, name, namespace);
+  };
+ * 
+
+ */
+export const signUrlIfNeeded = (url: string) => { // 大概和请求头参数的sign相关
   return new Promise<string>(resolve => {
     if (isYuanKouSuan() && greaterThanOrEqualTo('3.42.0') && (url.indexOf('{device}') !== -1 || url.indexOf('{client}') !== -1)) {
+      // 调用函数名requestConfig, 传递参数path:url, 有错误返回url, 没错误返回执行结果res.wrappedUrl
+      // 但是找不到requestConfig在哪: (window.requestConfig_callback_1728546427344_13 && window.requestConfig_callback_1728546427344_13("W251bGxd"))
       runUniqueApi('requestConfig', {
         path: url,
         trigger: (err: any, res: any) => {
