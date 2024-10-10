@@ -2,9 +2,7 @@
 
 - proxypin抓包
 经过抓包分析，其中https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match为本次pk试题及答案，  
-但是提交答案的https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/submit接口被加密了，我们无法直接提交答案。  
-推测加密算法位于https://xyks.yuanfudao.com/leo-client-perf/android/leoreport或者https://xyks.yuanfudao.com/bh5/leo-web-oral-pk/result.html  
-逆向算法需要巨大工作量，我们准备hook网络请求获取下发试题时的答案，然后模拟绘制答案  
+但是提交答案的https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/submit接口被加密了，我们无法直接提交答案。   
 
 - [anay_reqMethod.js](anay_reqMethod.js)hook常见请求库  
 准备hook `okhttp3` `java.net.HttpURLConnection` `java.net.URL` 三个常见请求库，发现捕获到的所有请求均来自`java.net.URL`
