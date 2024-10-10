@@ -204,7 +204,8 @@ const showToast = throttle((msg) => {
 
  * runUniqueApi：
  在webpack://leo-web-oral-pk/node_modules/@solar/webview/lib/index.js
-  export var runUniqueApi = function (name, params, namespace) {
+ name=requestConfig, params=object:"/leo-game-pk/{client}/math/pk/match?pointId=2", namespace=LeoSecure
+  export var runUniqueApi = function (name, params, namespace) { 
       if (namespace === void 0) { namespace = ''; }
       if (params.callback) {
           params.trigger = params.callback;
@@ -217,13 +218,15 @@ const showToast = throttle((msg) => {
       }, name, namespace);
   };
  * 
-
+ 详见 `detail_requestConfig.md`
  */
 export const signUrlIfNeeded = (url: string) => { // 大概和请求头参数的sign相关
   return new Promise<string>(resolve => {
     if (isYuanKouSuan() && greaterThanOrEqualTo('3.42.0') && (url.indexOf('{device}') !== -1 || url.indexOf('{client}') !== -1)) {
       // 调用函数名requestConfig, 传递参数path:url, 有错误返回url, 没错误返回执行结果res.wrappedUrl
-      // 但是找不到requestConfig在哪: (window.requestConfig_callback_1728546427344_13 && window.requestConfig_callback_1728546427344_13("W251bGxd"))
+      /* requestConfig调试到这里: (window.requestConfig_callback_1728546427344_13 && window.requestConfig_callback_1728546427344_13("W251bGxd"))
+      解码W251bGxd为[null]
+      */
       runUniqueApi('requestConfig', {
         path: url,
         trigger: (err: any, res: any) => {
@@ -299,7 +302,7 @@ initAxiosInstanceResponse(instance)
 export default instance
 
 ```
-
+**对于上面的requestConfig，详见[detail_requestConfig.md](detail_requestConfig.md)**
 ## 彩蛋, 巅峰对决是大学专场, `webpack://leo-web-oral-pk/./src/config/pk-config.ts`注释如是说
 ```js
 export enum GradeEnum {
