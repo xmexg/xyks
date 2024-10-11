@@ -136,6 +136,7 @@ def str_to_xy(str):
 
 if __name__ == "__main__":
     # 执行滑动操作
+    swipe_screen(">")
     swipe_screen("<")
     swipe_screen("=")
 
