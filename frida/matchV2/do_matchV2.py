@@ -53,11 +53,19 @@ def on_message(message, data):
         # 再解base64
         result = base64.b64decode(cleaned_string).decode('utf-8')
 
+        # 这里输出的是解密后的题目及答案
+        # 修改result来修改题目
         # {"pkIdStr":"609469730679459854","otherUser":{"userId":1054886576,"userName":"猿宝86576","avatarUrl":"https://leo-online.fbcontent.cn/leo-gallery/16a9fd013ae4a67.png","userPendantUrl":null},"otherWinCount":1,"selfWinCount":13,"targetCostTime":50000,"examVO":{"pkIdStr":"609469730679459854","pointId":2,"pointName":"20以内数的比大小","ruleType":0,"questionCnt":10,"correctCnt":0,"costTime":0,"questions":[{"id":0,"examId":609469730679459854,"content":"18\\circle6","answer":">","userAnswer":null,"answers":[">"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":1,"examId":609469730679459854,"content":"18\\circle16","answer":">","userAnswer":null,"answers":[">"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":2,"examId":609469730679459854,"content":"13\\circle18","answer":"<","userAnswer":null,"answers":["<"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":3,"examId":609469730679459854,"content":"11\\circle17","answer":"<","userAnswer":null,"answers":["<"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":4,"examId":609469730679459854,"content":"18\\circle10","answer":">","userAnswer":null,"answers":[">"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":5,"examId":609469730679459854,"content":"1\\circle3","answer":"<","userAnswer":null,"answers":["<"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":6,"examId":609469730679459854,"content":"2\\circle20","answer":"<","userAnswer":null,"answers":["<"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":7,"examId":609469730679459854,"content":"8\\circle13","answer":"<","userAnswer":null,"answers":["<"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":8,"examId":609469730679459854,"content":"7\\circle9","answer":"<","userAnswer":null,"answers":["<"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":9,"examId":609469730679459854,"content":"17\\circle14","answer":">","userAnswer":null,"answers":[">"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"}],"updatedTime":0}}
         print(result)
 
+        # result进行base64加密
+        result_makebase64 = base64.b64encode(result.encode('utf-8')).decode('utf-8')
+
+        # 把符号进行unicode
+        result_makestr = result_makebase64.encode('unicode_escape').decode('utf-8')
+
         # 传回js文件
-        script.post({'type': 'input', 'payload': result})
+        script.post({'type': 'input', 'payload': result_makestr})
     else:
         print("[{}] {}".format(message['type'], message['description']))
 
