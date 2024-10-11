@@ -1,4 +1,4 @@
-# 小猿搜题frida笔记
+# 小猿口算逆向笔记
 
 - proxypin抓包
 经过抓包分析，其中https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match为本次pk试题及答案，  
@@ -11,7 +11,7 @@
 发现能获取到数据包，但是不全，需要的pk试题数据包不在这里
 
 - 思考  
-小猿搜题的各类功能是实时vue网页，小猿搜题本身仅有极少功能使用`java.net.URL`发一点点包，其余均为vue网页
+小猿口算的各类功能是实时vue网页，小猿口算本身仅有极少功能使用`java.net.URL`发一点点包，其余均为vue网页
 
 - [anay_webview.js](anay_webview.js)  
 。。。。  

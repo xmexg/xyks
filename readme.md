@@ -1,7 +1,7 @@
 # 小猿口算
 未完成的逆向笔记  
 vue逆向笔记 [frida/readme.md](frida/readme.md)  
-sign逆向笔记 [frida/hook_JsBridgeBean_sign.js](frida/hook_JsBridgeBean_sign.js)
+sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 
 # 目录说明
 |||
@@ -46,7 +46,7 @@ sign逆向笔记 [frida/hook_JsBridgeBean_sign.js](frida/hook_JsBridgeBean_sign.
 
 
 # 进度
-## 正在解`sign`  
+## [正在通过frida调用的形式不解具体算法拿到带sign的url](./frida/sign_decrypt.md)  
 获取pk试题及答案，提交答案主要在`exercise.ts`文件里  
 生成请求参数位于`request.ts`文件里  
 跟踪`signUrlIfNeeded`方法，一路跟踪发现使用`solar`让安卓程序生成sign再把url带参数传回来  

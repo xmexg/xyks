@@ -3,6 +3,9 @@
 
 - 虽然dexdump文件夹放置了使用frida-dexdump导出了dex,但是jadx逆向发现直接逆向apk得到的效果更好  
 
+- 对于sign，具体的加密算法位于com.fenbi.android.leo.webapp.secure.commands.RequestConfigCommand.Companion.c, 但是该方法无法完全导出dex，我无法反编译出源码。  
+**应该不会有具体的sign算法，我正在分析调用过程，准备通过hook的方式，向frida传入无sign的url链接，传出带sign的url链接，中间计算过程由小猿口算app生成。**
+
 # frida注入
 使用以下命令注入现有的sign测试脚本
 ```
@@ -61,3 +64,6 @@ WebView loading URL: javascript:(window.requestConfig_1728561502343_16 && window
 ![sign1](/frida/image/sign1.png)  
 
 详见[hook_JsBridgeBean_sign.js](hook_JsBridgeBean_sign.js)
+
+有问题的生成带sign的url演示: [do_makesign.js](do_makesign.js)  
+传入的空的回调地址,无法生成sign
