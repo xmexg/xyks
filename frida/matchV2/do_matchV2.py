@@ -24,7 +24,7 @@ import time
 def answer_write(answer):
     for i in range(len(answer)):
         number_command.swipe_screen(answer[i])
-        time.sleep(0.08)
+        time.sleep(0.16)
 
 def select_answer(answer):
 
@@ -53,9 +53,6 @@ def select_answer(answer):
 
 
 def gui_answer(answer, q_num):
-    # CONFIG #
-    tick_time = 0.05  # 每题间隔时间
-    start_time = 12.5  # 开始做题前摇时间
     # 创建一个GUI
     root = tk.Tk()
     root.title("继续执行")
@@ -63,32 +60,14 @@ def gui_answer(answer, q_num):
     def on_button_click():
         answer_write(answer)  # 继续执行代码
 
-    def on_button2_click():
-        number_command.next_round()  # 继续执行代码
-        root.destroy()
+     # 创建一个按钮
 
-    # 创建一个按钮
     button = tk.Button(root, text="点击继续", command=on_button_click)
-    button2 = tk.Button(root, text="下一把", command=on_button2_click)
     button.pack(pady=20)
-    button2.pack(pady=20)
 
-    # 设置定时器，若干秒后自动点击按钮
-    time = int(start_time * 1000)
-    root.after(time, on_button_click)
-    time2 = int((start_time + tick_time * 1.15 * q_num + 5) * 1000)
-    root.after(time2, on_button2_click)
     # 运行 GUI 界面
     root.mainloop()
 
-    # time.sleep(4)
-    # answer_write(answer)
-    # time.sleep(7)
-    # command = "input tap 1445 1272"
-    # number_command.run_adb_command(command)
-    # time.sleep(0.1)
-    # command = "input tap 2144 1694"
-    # number_command.run_adb_command(command)
 
 # 通过链接到虚拟机frida-server
 device = frida.get_usb_device()
@@ -136,6 +115,7 @@ def on_message(message, data):
         answer_dict = json.loads(result)
         select_answer(answer_dict)
 
+    # TODO 数据重新返回
 
         # result进行base64加密
         result_makebase64 = base64.b64encode(result.encode('utf-8')).decode('utf-8')
