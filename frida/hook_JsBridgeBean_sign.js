@@ -232,7 +232,25 @@ Java.perform(function() {
         //     console.log("RequestConfigCommand$Companion$call$1.create obj is null");
         // }
         let result = this["create"](obj, cVar)
-        console.log(`RequestConfigCommand$Companion$call$1.create result=${result}`)
+        console.log(`[*] 创建结果 RequestConfigCommand$Companion$call$1.create result=${result}`)
+        Object.getOwnPropertyNames(result).forEach(prop => {
+            console.log(`${prop} = ${result[prop]}`);
+        });
+        return result
+    }
+
+    /**
+     * 最终关键点还是在com.fenbi.android.leo.webapp.secure.commands.RequestConfigCommand.Companion.c方法
+     * public final java.lang.Object c(com.fenbi.android.leo.webapp.secure.commands.RequestConfigBean r6, kotlin.coroutines.c<? super java.util.List<java.lang.String>> r7)
+       该方法无法反编译, 应该在里面调用了`apk安装包/lib/arm64-v8a/libRequestEncoder.so`进行计算sign
+     */
+    Companion["c"].implementation = function (requestConfigBean, obj) {
+        console.log(`[!] 无法反编译的 Companion.c is called: `, requestConfigBean, obj)
+        if(requestConfigBean != null) {
+            console.log(`[!] 无法反编译的 Companion.c requestConfigBean.path: ${requestConfigBean.getPath()}`)
+        }
+        let result = this["c"](requestConfigBean, obj)
+        console.log(`[!] 无法反编译的 Companion.c result: ${result}`)
         return result
     }
     

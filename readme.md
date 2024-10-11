@@ -103,3 +103,12 @@ WebView loading URL: javascript:(window.requestConfig_1728561502343_16 && window
 frida-dexdump -FU
 ```
 frida-dexdump导出的[dex](frida/dexdump/小猿口算),拖到jadx窗口逆向
+
+## 现状
+本人技术有限，感觉[hook把无signurl转带signurl](/frida/hook_JsBridgeBean_sign.js)到了本人能力极限了  
+启动未完成的hook脚本
+```sh
+cd frida
+frida -U -n 小猿口算 -l hook_JsBridgeBean_sign.js
+```
+![image](/image/hook_JsBridgeBean_sign.png)
