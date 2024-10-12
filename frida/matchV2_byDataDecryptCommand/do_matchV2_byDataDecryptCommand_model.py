@@ -1,6 +1,7 @@
 # https://github.com/cr4n5/XiaoYuanKouSuan/issues/79
 
 """
+还是不能修改答案
 在现有的抓包脚本加入当前目录的这两个文件, 这两个文件会返回加密题目及答案
 """
 import json
@@ -52,10 +53,10 @@ def on_message(message, data):
 
         # 删除所有换行符
         encoded_data = encoded_data.replace("\n", "")
-        print("[JS] Received Base64: {}".format(encoded_data))
+        # print("[JS] Received Base64: {}".format(encoded_data))
 
         # 解码Base64
-        result = base64.b64decode(encoded_data)
+        result = base64.b64decode(encoded_data).decode('utf-8')
 
         # 输出解密后的题目及答案
         print(result)
@@ -70,10 +71,10 @@ def on_message(message, data):
         result_makebase64 = base64.b64encode(result.encode('utf-8')).decode('utf-8')
 
         # 每76个字符加一个\n字符
-        result_makebase64n = "\n".join(result_makebase64[i:i + 76] for i in range(0, len(result_makebase64), 76))
+        # result_makebase64 = "\n".join(result_makebase64[i:i + 76] for i in range(0, len(result_makebase64), 76))
 
         # 传回js文件
-        script.post({'type': 'input', 'payload': result_makebase64n})
+        script.post({'type': 'input', 'payload': result_makebase64})
     else:
         print("[{}] {}".format(message['type'], message['description']))
 
