@@ -1,6 +1,8 @@
 # 参考https://github.com/xmexg/xyks/issues/9
 # anay_webview.js意外对解matchV2有效果
 
+# 注意该文件已过时, 请根据模板文件修改
+ 
 """
 do_matchV2.js这段程序能输出且仅输出抓到的加密题目及答案, 通过do_matchV2.js获取题目及答案, 然后python解密
 

@@ -63,17 +63,20 @@ def on_message(message, data):
         for question in data["examVO"]["questions"]:
             print(question["id"], question["content"], question["answer"])
 
-        # 修改result来修改题目及答案 不管事
-        result = '{"pkIdStr":"609469730679459854","otherUser":{"userId":1054886576,"userName":"hook名字","avatarUrl":"https://leo-online.fbcontent.cn/leo-gallery/16a9fd013ae4a67.png","userPendantUrl":null},"otherWinCount":1,"selfWinCount":13,"targetCostTime":50000,"examVO":{"pkIdStr":"609469730679459854","pointId":2,"pointName":"20以内数的比大小","ruleType":0,"questionCnt":2,"correctCnt":0,"costTime":0,"questions":[{"id":0,"examId":609469730679459854,"content":"18\\circle6","answer":">","userAnswer":null,"answers":[">"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":1,"examId":609469730679459854,"content":"18\\circle16","answer":">","userAnswer":null,"answers":[">"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"}],"updatedTime":0}}'
+        # 修改result来修改题目及答案
+        # result = '{"pkIdStr": "609853965701627919", "otherUser": {"userId": 261377152, "userName": "猿宝77152", "avatarUrl": "https://leo-online.fbcontent.cn/leo-gallery/16a9fd09b1d892a.png", "userPendantUrl": null}, "otherWinCount": 1, "selfWinCount": 15, "targetCostTime": 30000, "examVO": {"pkIdStr": "609853965701627919", "pointId": 2, "pointName": "20以内数的比大小", "ruleType": 0, "questionCnt": 10, "correctCnt": 0, "costTime": 0, "questions": [{"id": 0, "examId": 609853965701627919, "content": "18\\circle12", "answer": ">", "userAnswer": null, "answers": [">"], "status": 0, "script": null, "wrongScript": null, "ruleType": "COMPARE"}], "updatedTime": 0}}'
+        data['examVO']['questions'] = [data['examVO']['questions'][0]]
+        # 把data转成字符串赋值给result
+        result = json.dumps(data, ensure_ascii=False)
 
         # result进行base64加密
         result_makebase64 = base64.b64encode(result.encode('utf-8')).decode('utf-8')
 
         # 每76个字符加一个\n字符,不是换行符
-        result_makebase64n = "\\n".join(result_makebase64[i:i + 76] for i in range(0, len(result_makebase64), 76))
+        # result_makebase64 = "\n".join(result_makebase64[i:i + 76] for i in range(0, len(result_makebase64), 76))
 
         # 把符号进行unicode, 把+替换成\u002b, 把=替换成\u003d
-        result_makeunicode = result_makebase64n.replace('+', '\\u002b').replace('=', '\\u003d')
+        result_makeunicode = result_makebase64.replace('+', '\\u002b').replace('=', '\\u003d')
 
         # 加上前17 后3个字节
         result_makeunicode_173 = '[null,{"result":"' + result_makeunicode + '"}]'

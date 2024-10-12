@@ -12,7 +12,7 @@ WebView.loadUrl.overload('java.lang.String').implementation = function(url) {
                 // py这样写的script.post({'type': 'input', 'payload': result}), 这里显示Received: [object Object],所以这里要取value.payload
                 url = url.replace(base64EncodedString, value.payload);
                 console.log('Replaced: ' + url);
-            });
+            }).wait()
         }
     }
     // 继续执行原来的 loadUrl 方法
