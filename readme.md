@@ -130,8 +130,8 @@ frida-dexdump导出的[dex](frida/dexdump/小猿口算),拖到jadx窗口逆向
 
 ## 现状
 已完成:   
-+ 感谢 @x781078959 完成[hook解密试题及答案,模拟滑动](frida/matchV2)  
-+ 感谢 @taotao5 在 #9 提供的[hook sign](frida/gan_sign)方向
++ 感谢 [@x781078959](https://github.com/x781078959) 完成[hook解密试题及答案,模拟滑动](frida/matchV2)  
++ 感谢 [@taotao5](https://github.com/taotao5) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的[hook sign](frida/gan_sign)方向
 
 ## 免责声明
 

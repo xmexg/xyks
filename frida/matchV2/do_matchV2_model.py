@@ -16,22 +16,6 @@ import frida
 import sys
 import base64
 
-result = '{"pkIdStr":"609469730679459854","otherUser":{"userId":1054886576,"userName":"hook名字","avatarUrl":"https://leo-online.fbcontent.cn/leo-gallery/16a9fd013ae4a67.png","userPendantUrl":null},"otherWinCount":1,"selfWinCount":13,"targetCostTime":50000,"examVO":{"pkIdStr":"609469730679459854","pointId":2,"pointName":"20以内数的比大小","ruleType":0,"questionCnt":2,"correctCnt":0,"costTime":0,"questions":[{"id":0,"examId":609469730679459854,"content":"18\\circle6","answer":">","userAnswer":null,"answers":[">"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":1,"examId":609469730679459854,"content":"18\\circle16","answer":">","userAnswer":null,"answers":[">"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"}],"updatedTime":0}}'
-
-# result进行base64加密
-result_makebase64 = base64.b64encode(result.encode('utf-8')).decode('utf-8')
-result_makebase64n = "\\n".join(result_makebase64[i:i+76] for i in range(0, len(result_makebase64), 76))
-
-# 把符号进行unicode, 把+替换成\u002b, 把=替换成\u003d
-result_makeunicode = result_makebase64n.replace('+', '\\u002b').replace('=', '\\u003d')
-
-# 加上前17 后3个字节
-result_makeunicode_173 = '[null,{"result":"' + result_makeunicode + '"}]'
-
-# 再base64加密
-result_makestr = base64.b64encode(result_makeunicode_173.encode('utf-8')).decode('utf-8')
-
-print(result_makestr)
 
 # 通过链接到虚拟机frida-server
 device = frida.get_usb_device()
