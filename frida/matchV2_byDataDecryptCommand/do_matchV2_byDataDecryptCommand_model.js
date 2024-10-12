@@ -12,14 +12,12 @@ Java.perform(function() {
         send(originalResult.toString());
 
         // 同步等待监听者返回新数据
-        var newResult = null;
-        while (newResult === null) {
-            newResult = recv('input', function(value) {
-                console.log('[matchV2_byDataDecryptCommand] Data Replaced');
-                console.log(value.payload);
-                newResult = value.payload;
-            });
-        }
+        var newResult
+        recv('input', function(value) {
+            console.log('[matchV2_byDataDecryptCommand] Data Replaced');
+            console.log(value.payload);
+            newResult = value.payload;
+        }).wait()
 
         // 确保新数据是一个字符串
         if (typeof newResult !== 'string') {
