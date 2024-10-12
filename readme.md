@@ -47,6 +47,7 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 
 # 进度
 ## [关于试题加密](https://github.com/xmexg/xyks/issues/9)
+- 方法一(不可修改答案):  
 使用[frida/matchV2](/frida/matchV2)目录下的py脚本或ts脚本，他们可以拿到试题和答案
 [do_matchV2.py](frida/matchV2/do_matchV2.py)文件输出如下： 
 ```
@@ -62,6 +63,10 @@ Script loaded successfully
 
 ```
 [视频演示](/video/frida_matchV2.mp4)
+
+- 方法二:  
+使用[示例模板](frida/matchV2_byDataDecryptCommand)目录下的py脚本或ts脚本，他们可以拿到试题和答案  
+
 
 ## [未经测试的加载RequestEncoder生成sign方法](frida/gan_sign)
 根据 [taotao5](https://github.com/taotao5) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的hook方向, 现写出:  
@@ -132,6 +137,7 @@ frida-dexdump导出的[dex](frida/dexdump/小猿口算),拖到jadx窗口逆向
 已完成:   
 + 感谢 [@x781078959](https://github.com/x781078959) 完成[hook解密试题及答案,模拟滑动](frida/matchV2)  
 + 感谢 [@taotao5](https://github.com/taotao5) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的[hook sign](frida/gan_sign)方向
++ 感谢 [@ZQBCWG](https://github.com/ZQBCWG) 在 [https://github.com/cr4n5/XiaoYuanKouSuan/issues/79](https://github.com/cr4n5/XiaoYuanKouSuan/issues/79) 提供hook试题及答案新方向, 实现了查看, 好像还是不能修改试题及答案, [查看示例模板](frida/matchV2_byDataDecryptCommand)
 
 ## 免责声明
 
