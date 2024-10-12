@@ -1,5 +1,5 @@
 # gan_sign
-感谢 [@dfaofeng](https://github.com/dfaofeng) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的hook方向
+感谢 [@taotao5](https://github.com/taotao5) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的hook方向
 
 |文件|作用|
 |--|--|
