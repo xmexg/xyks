@@ -64,7 +64,7 @@ Script loaded successfully
 [视频演示](/video/frida_matchV2.mp4)
 
 ## [未经测试的加载RequestEncoder生成sign方法](frida/gan_sign)
-根据 [@dfaofeng](https://github.com/dfaofeng) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的hook方向, 现写出:  
+根据 [taotao5](https://github.com/taotao5) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的hook方向, 现写出:  
 + [anay_loadRequestEncoder.js](frida/anay_loadRequestEncoder.js) hook分析测试脚本
 + [gan_sign_model.js](frida/gan_sign/gan_sign_model.js) 生成sign
 + [gan_sign_model.py](frida/gan_sign/gan_sign_model.py) 提供python调用
@@ -129,13 +129,9 @@ frida-dexdump -FU
 frida-dexdump导出的[dex](frida/dexdump/小猿口算),拖到jadx窗口逆向
 
 ## 现状
-本人技术有限，感觉[hook把无signurl转带signurl](/frida/hook_JsBridgeBean_sign.js)到了本人能力极限了  
-启动未完成的hook脚本
-```sh
-cd frida
-frida -U -n 小猿口算 -l hook_JsBridgeBean_sign.js
-```
-![image](/image/hook_JsBridgeBean_sign.png)
+已完成:   
++ 感谢 @x781078959 完成[hook解密试题及答案,模拟滑动](frida/matchV2)  
++ 感谢 @taotao5 在 #9 提供的[hook sign](frida/gan_sign)方向
 
 ## 免责声明
 

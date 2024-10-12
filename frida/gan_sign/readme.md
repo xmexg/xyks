@@ -5,3 +5,4 @@
 |--|--|
 |gan_sign_model.js|模型, hook生成sign|
 |gan_sign_model.py|模型, 提供python示例|
+|gan_sign_exec_model.py|模型, 因为py调用该js无法获取到类, 改为exec执行|
