@@ -134,6 +134,9 @@ frida-dexdump导出的[dex](frida/dexdump/小猿口算),拖到jadx窗口逆向
 待完成：
 + [@jqjhl](https://github.com/jqjhl) 提供待逆向的加密算法 [fun_001eefc.txt](资料/解密算法/fun_001eefc.txt)
 
+推荐项目：
++ 修改数据包欺骗服务器做题耗时: https://github.com/Hawcett/XiaoYuanKouSuan_Frida_hook
+
 ## 免责声明
 
 1. 本仓库发布的 `xyks` (下文均用本项目代替) 项目中涉及的任何脚本，仅用于测试和学习研究，禁止用于商业用途，不能保证其合法性，准确性，完整性和有效性，请根据情况自行判断。
