@@ -52,13 +52,14 @@ def on_message(message, data):
         bytes_obj = bytes.fromhex(message['payload'])
         string = bytes_obj.decode('utf-8')
         string = string.replace(r'\"', "%")
-        # 修正null不加"引号"导致的错误
+        # 修正null不加引号导致的错误
         string = string.replace("null", '"null"')
         print("字符串: ", string)
         json_data = json.loads(string)
         print(json_data)
         print('原始花费时间：', json_data['costTime'])
-        json_data['costTime'] = 2000
+        # TODO 时间不要修改为0 最低为1 否则会有难以解决的错误
+        json_data['costTime'] = 100
         print('现在花费时间：', json_data['costTime'])
         print(json_data)
         data = str(json_data).replace('%', r'\"')
