@@ -23,12 +23,12 @@ cookies = {
     "YFD_U": "-3211421434165909800",
     "__sub_user_infos__": "/24T7Ovgtuud9LSYuz4IE8QXC8WtncTejJIS1NgUsGUc8dJri87nwxAR7ZYZSGLMzASpBTOcRDDcGj5XRSh1wQ==",
     "g_loc": "vPeteFfrRL2jJ0VNIL3TWQ==",
-    "g_sess": "mNlruvzVSah744XpRWZwrJnSf85irHQXWZNUGSn27yzfa9xOA1atJfbDyVz8AXA8gdxY9+TnZCJxGqI5iuiiuUnweref1Oh67snIy/jPY26egEIJBewmKZu/o6dla1Nt",
+    "g_sess": "mNlruvzVSah744XpRWZwrJnSf85irHQXWZNUGSn27yzqcVC4X47xgec3wZzaHdpycmhggh4Nc/ETKNNMvV6z+l9HmLXdNf7tLzzWJYrgsC55vyiiufCCQNT8ynqqTJPG",
     "ks_deviceid": "264747485",
     "ks_persistent": "E7HkOGfEedeolQpPvUgvctiPZ1hsCdgCrWumlSnrg10fRR9HYdofd0CBlxMTQcI8J7tQGTZoCoUi1nDWMDPuw7GN5JOGpwpJ+6HADJ+6BeY=",
     "ks_sess": "+aI8wF/5r4paFMXzig5QgEPWtR3TDnSVQ2eV1eGhImwT/41ip5vnvURH8V1LdJxz",
     "persistent": "EPLFTB7BUdycG28sjEfjTHAPCWlrbTYUyPUdrydyp42z3wiXT9eIussNNc+8BoWua49Wf+i8fY2M/nXqZLBd6w==",
-    "sess": "mNlruvzVSah744XpRWZwrJnSf85irHQXWZNUGSn27yzfa9xOA1atJfbDyVz8AXA8gdxY9+TnZCJxGqI5iuiiuW0dgwRApB/EPcNTcZHPTb0=",
+    "sess": "mNlruvzVSah744XpRWZwrJnSf85irHQXWZNUGSn27yzqcVC4X47xgec3wZzaHdpycmhggh4Nc/ETKNNMvV6z+mAQCs8XGPVbybOXWsQ6NLc=",
     "sid": "4442320405456624390",
     "userid": "1052996838"
 }
@@ -68,8 +68,26 @@ matchV2_response = requests.post(matchV2_url, headers=matchV2_head)
 print("获取到试题未解密大概长度", len(matchV2_response.text))
 # 确认响应的二进制内容 (gpt的迷惑行为)
 binary_content = matchV2_response.content  # 这是二进制数据
+
+"""
+start 此处同webview共同调试
+"""
+def bytes_to_decimal(byte_data):
+    # 将字节数据转换为对应的十进制值
+    decimal_values = [byte for byte in byte_data]
+    return decimal_values
+
+# 输出二进制数字
+bin = bytes_to_decimal(binary_content)
+print(len(bin), bin)
+"""
+end 此处同webview共同调试
+"""
+
 # 将二进制数据进行 Base64 编码
 encoded_content = base64.b64encode(binary_content).decode('utf-8')
+# 再base64一次
+encoded_content = base64.b64encode(encoded_content.encode('utf-8')).decode('utf-8')
 # 原始二进制响应的base64编码
 # print(encoded_content)
 

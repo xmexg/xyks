@@ -10,6 +10,8 @@
 貌似试题原始响应包到目前DataDecryptCommand hook点之间还有加密?  
 ![image](./image/error_utf8.png)
 
+尝试逆向 [前端试题请求逆向](前端试题请求逆向.md)
+
 # 计划步骤
 1. 我们需要写一个发包脚本, 使用`gan_sign`生成`sign`值, 向`https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?pointId=2&_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=0e40a461631880b0937515fd93fe87b6&deviceCategory=pad`发起post
 
