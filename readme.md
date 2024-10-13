@@ -111,6 +111,7 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 推荐项目：
 + 修改数据包欺骗服务器做题耗时: https://github.com/Hawcett/XiaoYuanKouSuan_Frida_hook
 + 小猿搜题冲榜/刷排名/专用思路一s2w分: https://github.com/xiaou61/XiaoYuanKousuan
++ 控制跳转,瞬间提交: https://github.com/FoskyM/XiaoYuanKouSuan_Tutorial
 
 推荐链接
 + 全国每日榜: https://xyks.yuanfudao.com/bh5/leo-web-config-activity/activity.html?orionKey=leo.activity.config.picture.v5&_productId=611#/
