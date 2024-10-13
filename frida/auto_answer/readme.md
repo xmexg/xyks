@@ -19,7 +19,7 @@
 # 回顾
 - 解试题包加密  
   [matchV2](../matchV2) 于2024年10月11日(五)傍晚完成  
-  [matchV2_byDataDecryptCommand](../matchV2_byDataDecryptCommand) 于2024年10月13日(日)下午15时完成  
+  [matchV2_byDataDecryptCommand](../matchV2_byDataDecryptCommand) 于2024年10月12日(六)下午15时完成  
 
 - 解sign  
   [gan_sign](../gan_sign) 于2024年10月12日(六)凌晨2时完成  
