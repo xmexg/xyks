@@ -3,6 +3,10 @@
 vue逆向笔记 [frida/readme.md](frida/readme.md)  
 sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 
+# 请查看我们的最新进展
+[待完成的自动发包笔记](frida/auto_answer/readme.md)  
+我们目前什么也没做, 希望各位大佬能一起研究
+
 # 目录说明
 |||
 |--|--|
@@ -128,8 +132,9 @@ frida-dexdump导出的[dex](frida/dexdump/小猿口算),拖到jadx窗口逆向
 已完成:   
 + 感谢 [@x781078959](https://github.com/x781078959) 完成[hook解密试题及答案,模拟滑动](frida/matchV2)  
 + 感谢 [@taotao5](https://github.com/taotao5) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的[hook sign](frida/gan_sign)方向
-+ 感谢 [@ZQBCWG](https://github.com/ZQBCWG) 在 [https://github.com/cr4n5/XiaoYuanKouSuan/issues/79](https://github.com/cr4n5/XiaoYuanKouSuan/issues/79) 提供hook试题及答案新方向, 实现了查看, 好像还是不能修改试题及答案, [查看示例模板](frida/matchV2_byDataDecryptCommand) 
++ 感谢 [@ZQBCWG](https://github.com/ZQBCWG) 在 [https://github.com/cr4n5/XiaoYuanKouSuan/issues/79](https://github.com/cr4n5/XiaoYuanKouSuan/issues/79) 提供hook试题及答案新方向, 实现了查看修改试题及答案, [查看示例模板](frida/matchV2_byDataDecryptCommand) 
 + 感谢 [@x781078959](https://github.com/x781078959) 指出异步调用导致js在获取到py传入的新题库前return导致无法修改试题及答案的bug
++ 修改自 [XiaoYuanKouSuan_Frida_hook](https://github.com/Hawcett/XiaoYuanKouSuan_Frida_hook) 的[修改提交答案数据包](frida/submit)
 
 待完成：
 + [@jqjhl](https://github.com/jqjhl) 提供待逆向的加密算法 [fun_001eefc.txt](资料/解密算法/fun_001eefc.txt)

@@ -1,7 +1,6 @@
 # https://github.com/cr4n5/XiaoYuanKouSuan/issues/79
 
 """
-还是不能修改答案
 在现有的抓包脚本加入当前目录的这两个文件, 这两个文件会返回加密题目及答案
 """
 import json
@@ -72,16 +71,16 @@ def on_message(message, data):
         #     data['examVO']['questions'][i]['answer'] = "1"
         #     data['examVO']['questions'][i]['answers'] = ["1"]
 
+        # 将修改后的题目及答案转换为json字符串
         result = json.dumps(data, ensure_ascii=False)
-        # 修改result来修改题目及答案
-        # result = '{"pkIdStr":"609469730679459854","otherUser":{"userId":1054886576,"userName":"hook名字","avatarUrl":"https://leo-online.fbcontent.cn/leo-gallery/16a9fd013ae4a67.png","userPendantUrl":null},"otherWinCount":1,"selfWinCount":13,"targetCostTime":50000,"examVO":{"pkIdStr":"609469730679459854","pointId":2,"pointName":"20以内数的比大小","ruleType":0,"questionCnt":2,"correctCnt":0,"costTime":0,"questions":[{"id":0,"examId":609469730679459854,"content":"18\\circle6","answer":">","userAnswer":null,"answers":[">"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"},{"id":1,"examId":609469730679459854,"content":"18\\circle16","answer":">","userAnswer":null,"answers":[">"],"status":0,"script":null,"wrongScript":null,"ruleType":"COMPARE"}],"updatedTime":0}}'
-
+        
         # result进行base64加密
         result_makebase64 = base64.b64encode(result.encode('utf-8')).decode('utf-8')
 
         # 每76个字符加一个\n字符
         # result_makebase64 = "\n".join(result_makebase64[i:i + 76] for i in range(0, len(result_makebase64), 76))
 
+        # 输出加密后的题目及答案
         print(result_makebase64)
 
         if not isinstance(result_makebase64, str):
