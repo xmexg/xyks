@@ -8,28 +8,39 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 [待完成的自动发包笔记](frida/auto_answer/readme.md)  
 我们目前什么也没做, 希望各位大佬能一起研究
 
-# 目录说明
-|||
+# 关键目录说明
+
+|目录|功能|
 |--|--|
 |dexdump|使用frida-dexdump导出的dex|
 |frida|用到的一些脚本和逆向笔记|
 |har|在虚拟机抓到的包|
-|java_test|一点java测试|
+|java_test|一点java测试| 
+|[matchV2](frida/matchV2)|修改获取到的试题包,可修改成一道题任意答案|
+|[matchV2_byDataDecryptCommand](frida/matchV2_byDataDecryptCommand)|和`matchV2`同样的功能, 修改获取到的试题包,可修改成一道题任意答案|
+|[submit](frida/submit)|修改提交的答案包,可修改答题耗时|
+|[gan_sign](frida/gan_sign)|生成sign参数, 在未来纯协议发包时有用, 目前没用|  
+
 
 # 如何复现
 ## adb相关
-    提前下载platform模块并放入系统环境变量。
-    运行PowerShell或者CMD
-    输入`adb devices`查找设备绑定
-    输入`adb connnect 127.0.0.1:port` 注意 此处的port为端口号 具体查看模拟器的ADB端口 Mumu模拟器一般默认为16384
-    或者直接输入`adb connect 127.0.0.1:16384`
-    下载frida-server-android使用adb推送至安卓
-    `adb push frida-server-android*路径 /data/local/tmp`
-    `adb shell`
-    `su`此处需要在模拟器中授权
-    `cd /data/local/tmp`
-    `chmod 777 frida-server-android*`给rwx权限
-    `./frida-server-android*`即可运行frida，到此adb结束。
+现在frida使用`adb shell ps | grep com.fenbi.android.leo`查询小猿口算pid, 所以需要安装adb
+- 提前下载platform模块并放入系统环境变量。  
+- 运行PowerShell或者CMD  
+- 输入`adb devices`查找设备绑定  
+- 输入`adb connnect 127.0.0.1:port` 注意 此处的port为端口号 具体查看模拟器的ADB端口  
+  Mumu模拟器一般默认为16384 或者直接输入`adb connect 127.0.0.1:16384` 
+- 下载frida-server-android使用adb推送至安卓  
+    ```sh
+    adb push frida-server-android*路径 /data/local/tmp
+    adb shell
+    su #此处需要在模拟器中授权
+    cd /data/local/tmp
+    chmod 777 frida-server-android* #给rwx权限
+    ./frida-server-android*
+    ```
+    即可运行frida，到此adb结束。  
+
     注意不要退出powershell或者cmd的窗口
     ![image](https://github.com/user-attachments/assets/4d0570db-4b13-4f50-b48a-bdb30eee24a4)
 

@@ -1,7 +1,6 @@
 # https://github.com/cr4n5/XiaoYuanKouSuan/issues/79
 
 """
-还是不能修改答案
 在现有的抓包脚本加入当前目录的这两个文件, 这两个文件会返回加密题目及答案
 """
 import json
