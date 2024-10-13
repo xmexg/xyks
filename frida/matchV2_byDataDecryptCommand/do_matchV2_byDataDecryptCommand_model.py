@@ -1,14 +1,24 @@
 # https://github.com/cr4n5/XiaoYuanKouSuan/issues/79
 
 """
+还是不能修改答案
 在现有的抓包脚本加入当前目录的这两个文件, 这两个文件会返回加密题目及答案
 """
 import json
+import time
 
 import frida
 import sys
 import base64
 import subprocess
+import re
+import threading
+import number_command
+import tkinter as tk
+import os
+
+ANSWER_COUNT = 1
+WAITING_TIME = 12
 
 # 使用 adb 获取 com.fenbi.android.leo 包名的 PID
 def _get_pid_from_adb(package_name):
@@ -43,6 +53,34 @@ session = device.attach(pid)
 with open("do_matchV2_byDataDecryptCommand_model.js", encoding='utf-8') as f:
     script = session.create_script(f.read())
 
+def auto_click_and_close(root, prepared_commands):
+    answer_write(prepared_commands)
+    root.destroy()
+
+def answer_write(prepared_commands):
+    start_time = time.time()
+    # 一次性发送准备好的 ADB 命令
+    number_command.run_adb_command(prepared_commands)
+    end_time = time.time()
+    print(f"点击操作耗时: {end_time - start_time:.3f}秒")
+
+
+def gui_answer():
+    # 预先准备 ADB 命令
+    prepared_commands = number_command.prepare_tap_commands(".", ANSWER_COUNT)
+
+    root = tk.Tk()
+    root.title("继续执行")
+    button = tk.Button(root, text="点击继续", command=lambda: answer_write(prepared_commands))
+    button.pack(pady=20)
+
+    # 设置定时器自动执行
+    threading.Timer(WAITING_TIME, auto_click_and_close, args=(root, prepared_commands)).start()
+
+    root.mainloop()
+
+
+
 # 设置控制台消息处理程序
 def on_message(message, data):
     if message['type'] == 'send':
@@ -51,40 +89,62 @@ def on_message(message, data):
         print("[JS] Received Base64: {}".format(encoded_data))
 
         # 删除所有换行符
-        encoded_data = encoded_data.replace("\n", "")
-        print("[JS] Received Base64: {}".format(encoded_data))
+        encoded_data = re.sub(r'[^A-Za-z0-9+/=]', '', encoded_data)
+        print("[JS] Cleaned Base64: {}".format(encoded_data))
 
         # 解码Base64
-        result = base64.b64decode(encoded_data).decode('utf-8')
+        try:
+            result = base64.b64decode(encoded_data).decode('utf-8')
+        except Exception as e:
+            print(f"[Error] Base64 decoding failed: {e}")
+            return
 
         # 输出解密后的题目及答案
-        print(result)
-        data = json.loads(result)
+        print("Decoded JSON: ", result)
+        try:
+            data = json.loads(result)
+        except json.JSONDecodeError as e:
+            print(f"[Error] JSON decoding failed: {e}")
+            return
+
+        print(data['targetCostTime'])
+        targetCostTime = data['targetCostTime']
+
+
+        os.chdir("..")
+        with open("test.txt", "w") as f:
+            f.write(str(targetCostTime))
 
         for question in data["examVO"]["questions"]:
             print(question["id"], question["content"], question["answer"])
 
         # 删除题目，修改答案
         data['examVO']['questions'] = [data['examVO']['questions'][0]]
-        # # 将题目答案全部改为"1"
-        # for i in range(len(data['examVO']['questions'])):
-        #     data['examVO']['questions'][i]['answer'] = "1"
-        #     data['examVO']['questions'][i]['answers'] = ["1"]
 
-        # 将修改后的题目及答案转换为json字符串
-        result = json.dumps(data, ensure_ascii=False)
-        
+        # TODO correctCnt":0,"costTime"
+        # correctCnt":10,"costTime":7190,"answer":1,"showReductionFraction":0,"updatedTime":1728795476677}
+        # data['examVO']['correctCnt'] = data['examVO']['questionCnt']
+        # data['examVO']['costTime'] = '1000'
+
+
+
+        for i in range(len(data['examVO']['questions'])):
+            data['examVO']['questions'][i]['answer'] = "1"
+            data['examVO']['questions'][i]['answers'] = ["1"]
+
+
+
+        # 确保JSON字符串格式一致
+        result = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
+        print("Serialized JSON: ", result)
+
+        threading.Thread(target=gui_answer).start()
+
         # result进行base64加密
         result_makebase64 = base64.b64encode(result.encode('utf-8')).decode('utf-8')
 
-        # 每76个字符加一个\n字符
-        # result_makebase64 = "\n".join(result_makebase64[i:i + 76] for i in range(0, len(result_makebase64), 76))
 
-        # 输出加密后的题目及答案
-        print(result_makebase64)
-
-        if not isinstance(result_makebase64, str):
-            result_makebase64 = str(result_makebase64)
+        print("Base64 Encoded: ", result_makebase64)
 
         # 传回js文件
         script.post({'type': 'input', 'payload': result_makebase64})
