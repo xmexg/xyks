@@ -63,10 +63,13 @@ def on_message(message, data):
         # targetCostTime - 10 稳赢 此处仅适合好友对战，如果不是请将下面的 int(targetCostTime) - 10修改为其他数值，需要与domatchV2byData联合使用
         os.chdir("..")
         with open("test.txt","r") as f:
-            targetCostTime = f.read()
+            ttime = f.read()
         f.close()
-        print(targetCostTime)
-        json_data['costTime'] = int(targetCostTime) - 10
+        print(ttime)
+        targetCostTime = int(ttime)
+        if(targetCostTime<=10):
+            targetCostTime = 11
+        json_data['costTime'] = targetCostTime - 10
         print('现在花费时间：', json_data['costTime'])
         print(json_data)
         data = str(json_data).replace('%', r'\"')
