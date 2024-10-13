@@ -3,7 +3,8 @@
 vue逆向笔记 [frida/readme.md](frida/readme.md)  
 sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 
-# 请查看我们的最新进展
+# [请查看我们的最新进展](frida/auto_answer/readme.md)
+**[一定要看!](frida/auto_answer/readme.md)**   
 [待完成的自动发包笔记](frida/auto_answer/readme.md)  
 我们目前什么也没做, 希望各位大佬能一起研究
 
@@ -63,70 +64,14 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 ![image](/image/change_json.png)
 
 
-## [未经测试的加载RequestEncoder生成sign方法](frida/gan_sign)
+## 已经测试有效的[加载RequestEncoder生成sign方法](frida/gan_sign)
 根据 [taotao5](https://github.com/taotao5) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的hook方向, 现写出:  
 + [anay_loadRequestEncoder.js](frida/anay_loadRequestEncoder.js) hook分析测试脚本
 + [gan_sign_model.js](frida/gan_sign/gan_sign_model.js) 生成sign
 + [gan_sign_model.py](frida/gan_sign/gan_sign_model.py) 提供python调用
 
 
-## [正在测试通过frida调用的形式不解具体算法拿到带sign的url](./frida/sign_decrypt.md)  
-获取pk试题及答案，提交答案主要在`exercise.ts`文件里  
-生成请求参数位于`request.ts`文件里  
-跟踪`signUrlIfNeeded`方法，一路跟踪发现使用`solar`让安卓程序生成sign再把url带参数传回来  
 
-+ 使用`anay_webview.js`能看到传递和调用链  
-```sh
-cd frida
-frida -U -n 小猿口算 -l anay_webview.js
-```
-```js
-WebView loading URL: javascript:(window.requestConfig_callback_1728561502343_17 && window.requestConfig_callback_1728561502343_17("W251bGxd
-"))
-解码 Base64: [null]
-调用链: java.lang.Exception
-        at android.webkit.WebView.loadUrl(Native Method)
-        at com.tencent.smtt.sdk.WebView.loadUrl(SourceFile:1)
-        at java.lang.reflect.Method.invoke(Native Method)
-        at org.lsposed.lspd.nativebridge.HookBridge.invokeOriginalMethod(Native Method)
-        at J.callback(Unknown Source:193)
-        at LSPHooker_.loadUrl(Unknown Source:11)
-        at com.fenbi.android.leo.webapp.JsBridgeBean.callback$leo_webview_release(SourceFile:73)
-        at com.fenbi.android.leo.webapp.secure.LeoSecureWebViewApi$g.run(SourceFile:11)
-        at android.os.Handler.handleCallback(Handler.java:938)
-        at android.os.Handler.dispatchMessage(Handler.java:99)
-        at android.os.Looper.loopOnce(Looper.java:201)
-        at android.os.Looper.loop(Looper.java:288)
-        at android.app.ActivityThread.main(ActivityThread.java:8060)
-        at java.lang.reflect.Method.invoke(Native Method)
-        at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:571)
-        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1091)
-
-WebView loading URL: javascript:(window.requestConfig_1728561502343_16 && window.requestConfig_1728561502343_16("W251bGwseyJ1c2VyQWdlbnQiOiJMZW8vMy45My4yIChYaWFvbWkyMjA2MTIyU0M7IEFuZHJvaWQgMTI7IFNjYWxlLzEuNDkpIiwid3JhcHBlZFVybCI6Ii9sZW8tZ2FtZS1way9hbmRyb2lkL21hdGgvcGsvaG9tZT9fcHJvZHVjdElkXHUwMDNkNjExXHUwMDI2cGxhdGZvcm1cdTAwM2RhbmRyb2lkMzJcdTAwMjZ2ZXJzaW9uXHUwMDNkMy45My4yXHUwMDI2dmVuZG9yXHUwMDNkeGlhb19taVx1MDAyNmF2XHUwMDNkNVx1MDAyNnNpZ25cdTAwM2RmMmQ2NjhjZTY3MDgxOWMwNWI3NjRhMjM3YzcyNjQ0Mlx1MDAyNmRldmljZUNhdGVnb3J5XHUwMDNkcGFkIn1d"))
-解码 Base64: [null,{"userAgent":"Leo/3.93.2 (Xiaomi2206122SC; Android 12; Scale/1.49)","wrappedUrl":"/leo-game-pk/android/math/pk/home?_productId=611&platform\u003dandroid32&version\u003d3.93.2&vendor\u003dxiao_mi&av\u003d5&sign\u003df2d668ce670819c05b764a237c726442&deviceCategory\u003dpad"}]
-调用链: java.lang.Exception
-        at android.webkit.WebView.loadUrl(Native Method)
-        at com.tencent.smtt.sdk.WebView.loadUrl(SourceFile:1)
-        at java.lang.reflect.Method.invoke(Native Method)
-        at org.lsposed.lspd.nativebridge.HookBridge.invokeOriginalMethod(Native Method)
-        at J.callback(Unknown Source:193)
-        at LSPHooker_.loadUrl(Unknown Source:11)
-        at com.yuanfudao.android.common.webview.base.JsBridgeBean$a.run(SourceFile:47)
-        at android.os.Handler.handleCallback(Handler.java:938)
-        at android.os.Handler.dispatchMessage(Handler.java:99)
-        at android.os.Looper.loopOnce(Looper.java:201)
-        at android.os.Looper.loop(Looper.java:288)
-        at android.app.ActivityThread.main(ActivityThread.java:8060)
-        at java.lang.reflect.Method.invoke(Native Method)
-        at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:571)
-        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1091)
-```
-
-+ 使用[frida-dexdump](https://github.com/hluwa/frida-dexdump)  
-```
-frida-dexdump -FU
-```
-frida-dexdump导出的[dex](frida/dexdump/小猿口算),拖到jadx窗口逆向
 
 ## 现状
 已完成:   
