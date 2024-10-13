@@ -113,6 +113,9 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 推荐项目：
 + 修改数据包欺骗服务器做题耗时: https://github.com/Hawcett/XiaoYuanKouSuan_Frida_hook
 
+推荐链接
++ 全国每日榜: https://xyks.yuanfudao.com/bh5/leo-web-config-activity/activity.html?orionKey=leo.activity.config.picture.v5&_productId=611#/
+
 ## 免责声明
 
 1. 本仓库发布的 `xyks` (下文均用本项目代替) 项目中涉及的任何脚本，仅用于测试和学习研究，禁止用于商业用途，不能保证其合法性，准确性，完整性和有效性，请根据情况自行判断。

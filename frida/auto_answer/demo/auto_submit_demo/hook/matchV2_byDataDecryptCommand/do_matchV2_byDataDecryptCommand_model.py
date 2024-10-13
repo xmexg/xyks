@@ -1,6 +1,8 @@
 # 复制粘贴 frida/auto_answer/demo/auto_submit_demo/hook/gan_sign/gan_sign_model.py 然后修改的
+import base64
 
 import frida
+import re
 
 class FridaResponseDecrypt:
     def __init__(self, package_name, js_file_path):
@@ -63,8 +65,14 @@ class FridaResponseDecrypt:
         # 设置控制台消息处理程序
         def on_message(message, data):
             if message['type'] == 'send':
-                # 已解密
-                self.reponse_str = message['payload']
+                # 已拿到二进制解密后的base64
+                encoded_data = message['payload']
+                # 删除所有换行符
+                encoded_data = re.sub(r'[^A-Za-z0-9+/=]', '', encoded_data)
+                print("[JS] Received Base64: {}".format(encoded_data))
+                # 解base64
+                result = base64.b64decode(encoded_data).decode('utf-8')
+                self.reponse_str = result
             else:
                 print("[{}] {}".format(message['type'], message['description']))
 
