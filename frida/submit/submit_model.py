@@ -6,6 +6,7 @@
 修改提交试题答案
 """
 import json
+import os
 
 import frida
 import sys
@@ -59,7 +60,16 @@ def on_message(message, data):
         print(json_data)
         print('原始花费时间：', json_data['costTime'])
         # TODO 时间不要修改为0 最低为1 否则会有难以解决的错误
-        json_data['costTime'] = 100
+        # targetCostTime - 10 稳赢 此处仅适合好友对战，如果不是请将下面的 int(targetCostTime) - 10修改为其他数值，需要与domatchV2byData联合使用
+        os.chdir("..")
+        with open("test.txt","r") as f:
+            ttime = f.read()
+        f.close()
+        print(ttime)
+        targetCostTime = int(ttime)
+        if(targetCostTime<=10):
+            targetCostTime = 11
+        json_data['costTime'] = targetCostTime - 10
         print('现在花费时间：', json_data['costTime'])
         print(json_data)
         data = str(json_data).replace('%', r'\"')
