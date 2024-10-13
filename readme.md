@@ -4,9 +4,7 @@ vue逆向笔记 [frida/readme.md](frida/readme.md)
 sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 
 # [请查看我们的最新进展](frida/auto_answer/readme.md)
-**[一定要看!](frida/auto_answer/readme.md)**   
 [待完成的自动发包笔记](frida/auto_answer/readme.md)  
-我们目前什么也没做, 希望各位大佬能一起研究
 
 # 关键目录说明
 
