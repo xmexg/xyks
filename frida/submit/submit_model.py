@@ -52,8 +52,8 @@ def on_message(message, data):
         bytes_obj = bytes.fromhex(message['payload'])
         string = bytes_obj.decode('utf-8')
         string = string.replace(r'\"', "%")
-        # 修正null不加引号导致的错误
-        string = string.replace("null", "'null'")
+        # 修正null不加"引号"导致的错误
+        string = string.replace("null", '"null"')
         print("字符串: ", string)
         json_data = json.loads(string)
         print(json_data)
