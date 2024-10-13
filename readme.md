@@ -17,6 +17,21 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 |java_test|一点java测试|
 
 # 如何复现
+## adb相关
+    提前下载platform模块并放入系统环境变量。
+    运行PowerShell或者CMD
+    输入`adb devices`查找设备绑定
+    输入`adb connnect 127.0.0.1:port` 注意 此处的port为端口号 具体查看模拟器的ADB端口 Mumu模拟器一般默认为16384
+    或者直接输入`adb connect 127.0.0.1:16384`
+    下载frida-server-android使用adb推送至安卓
+    `adb push frida-server-android*路径 /data/local/tmp`
+    `adb shell`
+    `su`此处需要在模拟器中授权
+    `cd /data/local/tmp`
+    `chmod 777 frida-server-android*`给rwx权限
+    `./frida-server-android*`即可运行frida，到此adb结束。
+    注意不要退出powershell或者cmd的窗口
+    ![image](https://github.com/user-attachments/assets/4d0570db-4b13-4f50-b48a-bdb30eee24a4)
 
 ## webview复现
 + windows:  
