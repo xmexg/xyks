@@ -5,7 +5,7 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 
 # [请查看我们的最新进展](frida/auto_answer/readme.md)
 [待完成的纯协议小猿口算实现模板](frida/auto_answer/readme.md)  
-**现有修改答案脚本不可用, 正在重新写逆向加密脚本**
+**对于纯协议版， 现有加密答案脚本不可用,  正在重新写逆向加密脚本**
 
 # 关键目录说明
 
