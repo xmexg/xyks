@@ -61,7 +61,7 @@ class FridaResponseDecrypt:
             raise Exception("Frida session 尚未初始化。请先调用 start() 方法。")
 
         # 加载js文件
-        with open(self.js_file_path) as f:
+        with open(self.js_file_path, encoding="utf-8") as f:
             script_content = f.read()
             script_content = script_content.replace("flag_base64", reponse_base64)
             self.script = self.session.create_script(script_content)

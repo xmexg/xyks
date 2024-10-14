@@ -16,9 +16,11 @@
 
 [✔] 3. 我们需要研究收到的试题包和待提交的答案包的json对应关系, 根据对应关系生成待提交的答案包
 
-[✘] 4. 我们需要修改[submit](../submit), 使其能够接收我们生成的答案包, 将答案包加密成服务器认可的二进制格式
+[✔] 4. 我们需要修改[submit](../submit), 使其能够接收我们生成的答案包, 将答案包加密成服务器认可的二进制格式
 
-[✘] 5. 向`https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/submit?_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=47d140c9a28f4d0343dfb9f109c93b2e&deviceCategory=pad`发包
+[✔] 5. 向`https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/submit?_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=47d140c9a28f4d0343dfb9f109c93b2e&deviceCategory=pad`发包
+
+[✘] 6. 根据get_cookie.js文件，修改后可获得相应Cookie，将其传入demo_pk.py的几个部分即可实现全协议结算作答。
 
 这里每一步都是巨坑
 

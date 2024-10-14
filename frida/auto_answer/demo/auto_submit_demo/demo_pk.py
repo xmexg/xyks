@@ -5,9 +5,15 @@ import time
 
 import requests
 import json
+
+from termcolor import colored
+from urllib3.exceptions import InsecureRequestWarning
+
 from hook.gan_sign.gan_sign_model import FridaSignExtractor # 用于生成sign
 from hook.matchV2_byDataDecryptCommand.do_matchV2_byDataDecryptCommand_model import FridaResponseDecrypt # 用于解密试题
 from hook.answer_encrypt.do_answer_encrypt_model import FridaRequestEncrypt # 用于加密答案
+
+import get_cookie
 
 # cookies, 后续应该改成先在手机pk一下, hook请求头拿cookie, 既省去抓包, 又可以当未来的cookie实时变化, 通过hook计算
 """
@@ -17,18 +23,19 @@ g_sess, sess
 \
 只需要填下面3个关键cookie即可
 """
+
 cookies = {
     "YFD_U": "",
     "__sub_user_infos__": "",
     "g_loc": "",
     "g_sess": "",
     "ks_deviceid": "",
-    "ks_persistent": "此处必填",
+    "ks_persistent": "",
     "ks_sess": "",
     "persistent": "",
-    "sess": "此处必填",
+    "sess": "",
     "sid": "",
-    "userid": "此处必填"
+    "userid": ""
 }
 
 
@@ -40,10 +47,11 @@ getQuestion_extractor = FridaSignExtractor("com.fenbi.android.leo", "hook/gan_si
 getQuestion_extractor.start()  # 初始化并附加到进程
 getQuestion_sign_value = getQuestion_extractor.getsign("/leo-game-pk/android/math/pk/match/v2")  # 获取签名
 print("gan_sign_model sign value:", getQuestion_sign_value)
-
 # 使用`gan_sign`生成`sign`值, 向`https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?pointId=2&_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=0e40a461631880b0937515fd93fe87b6&deviceCategory=pad`发起post请求
-matchV2_url = ("https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?pointId=2&_productId=611&platform=android32"
-       "&version=3.93.2&vendor=xiao_mi&av=5&sign={}&deviceCategory=pad").format(getQuestion_sign_value)
+matchV2_url = ("https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?"
+               "pointId=69&_productId=611&platform=android32&version=3.93.3&vendor=baidu&av=5&"
+               "sign={}&deviceCategory=phone").format(getQuestion_sign_value)
+# TODO 注意此处的version、vendor
 matchV2_head = {
     "accept": "application/json, text/plain, */*",
     "accept-encoding": "gzip, deflate",
@@ -52,16 +60,21 @@ matchV2_head = {
     "content-type": "application/x-www-form-urlencoded",
     "origin": "https://xyks.yuanfudao.com",
     "pragma": "no-cache",
-    "referer": "https://xyks.yuanfudao.com/bh5/leo-web-oral-pk/exercise.html?pointId=2&isFromInvite=undefined&_productId=611&vendor=xiao_mi&phaseId=3&from=yuansoutikousuan&YFD_U=-3211421434165909800&version=3.93.2&siwr=true&keypath=",
+    "referer": "https://xyks.yuanfudao.com/bh5/leo-web-oral-pk/exercise.html?"
+               "pointId=69&isFromInvite=undefined&_productId=611&vendor=baidu&phaseId=3&from=yuansoutikousuan&"
+               "YFD_U=自己填或者从get_cookies文件中拿&version=3.93.3&siwr=false&keypath=",
+    # TODO 注意此处的YFD_U、vendor、version
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "same-origin",
-    "user-agent": "Mozilla/5.0 (Linux; Android 12; 2206122SC Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Safari/537.36 YuanSouTiKouSuan/3.93.2",
+    "user-agent": "Mozilla/5.0 (Linux; Android 12; SDY-AN00 Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 YuanSouTiKouSuan/3.93.3",
+    # TODO 注意此处的user-agent也是从get_cookies文件中拿
     "x-requested-with": "com.fenbi.android.leo",
     "cookie": "; ".join([f"{k}={v}" for k, v in cookies.items()])
 }
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 # 发起post请求
-matchV2_response = requests.post(matchV2_url, headers=matchV2_head)
+matchV2_response = requests.post(matchV2_url, headers=matchV2_head, verify=False)
 # 输出返回结果长度, 应注意这是二进制乱码, 长度仅供参考有无获取成功, pk试题一般在400-500左右
 print("获取到试题未解密大概长度", len(matchV2_response.text))
 # 确认响应的二进制内容 (gpt的迷惑行为)
@@ -113,8 +126,9 @@ for question in answer_json["questions"]:
         "answer": 1,
         "showReductionFraction": 0
     }
+print(answer_json)
 answer_data = json.dumps(answer_json, ensure_ascii=False)  # 生成答案数据包
-print("生成答案: ", answer_data)
+print(colored("生成答案: ", 'red') + answer_data)
 
 
 """
@@ -130,7 +144,8 @@ answer_encrypt_base64 = request_encrypt.get_request_encrypt(answer_data_base64)
 upAnswer_extractor = FridaSignExtractor("com.fenbi.android.leo", "hook/gan_sign/gan_sign_model.js", None)  # 第3个是小袁口算的pid; 如果知道的话就传pid, 能免去adb查找, 提高效率; 不知道就传None
 upAnswer_extractor.start()  # 初始化并附加到进程
 upAnswer_sign_value = upAnswer_extractor.getsign("/leo-game-pk/android/math/pk/submit")  # 获取签名
-upAnswer_url = ("https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/submit?_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign={}&deviceCategory=pad").format(upAnswer_sign_value)
+upAnswer_url = ("https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/submit?_productId=611&platform=android32&version=3.93.3&vendor=baidu&av=5&sign={}&deviceCategory=phone").format(upAnswer_sign_value)
+# TODO 注意此处的version、deviceCategory、vendor
 upAnswer_head = {
     "accept": "application/json, text/plain, */*",
     "accept-encoding": "gzip, deflate",
@@ -139,13 +154,14 @@ upAnswer_head = {
     "content-type": "application/octet-stream",
     "origin": "https://xyks.yuanfudao.com",
     "referer": "https://xyks.yuanfudao.com/bh5/leo-web-oral-pk/result.html?",
-    "user-agent": "Mozilla/5.0 (Linux; Android 12; 2206122SC Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Safari/537.36 YuanSouTiKouSuan/3.93.2",
+    "user-agent": "Mozilla/5.0 (Linux; Android 12; SDY-AN00 Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 YuanSouTiKouSuan/3.93.3",
+    # TODO 同理
     "x-requested-with": "com.fenbi.android.leo",
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "same-origin",
     "cookie": "; ".join([f"{k}={v}" for k, v in cookies.items()])
 }
-upAnswer_response = requests.put(url=upAnswer_url, headers=upAnswer_head, data=base64.b64decode(answer_encrypt_base64))
+upAnswer_response = requests.put(url=upAnswer_url, headers=upAnswer_head, data=base64.b64decode(answer_encrypt_base64), verify=False)
 # 不是{"timestamp":1728884050091,"status":400,"message":"error"}就是成功了
-print("提交结果： ", upAnswer_response.text)  # {"timestamp":1728884050091,"status":400,"message":"error"}
+print(colored("提交结果： ", 'green') + upAnswer_response.text)  # {"timestamp":1728884050091,"status":400,"message":"error"}
