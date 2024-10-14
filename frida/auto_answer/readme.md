@@ -2,15 +2,10 @@
 纯协议小猿口算实现模板 (正在加密答案)
 
 # 现状
-本想写完自动脚本再push的, 但发现事情并不简单  
+已实现纯协议答题模板
+![image](./image/auto_submit.png)
 
-目前正在解决/无法解决[demo_pk.py](demo/auto_submit_demo/demo_pk.py)  
-
-正在加密答案
-
-**现有修改答案脚本不可用, 正在重新写逆向加密脚本**
-
-已经逆向答案加密, 准备实现中 [加密答案分析](../anay_answerEncrypt.js)
+~~已经逆向答案加密, 准备实现中 [加密答案分析](../anay_answerEncrypt.js)~~
 
 ~~尝试逆向 [前端试题请求逆向](前端试题请求逆向.md)~~
 

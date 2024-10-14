@@ -58,27 +58,21 @@ class FridaRequestEncrypt:
             print(f"adb 获取 PID 时出错: {e}")
             return None
 
-    def getstr(self, reponse_base64):
+    def get_request_encrypt(self, answer_base64):
         if self.session is None:
             raise Exception("Frida session 尚未初始化。请先调用 start() 方法。")
 
         # 加载js文件
         with open(self.js_file_path) as f:
             script_content = f.read()
-            script_content = script_content.replace("flag_base64", reponse_base64)
+            script_content = script_content.replace("flag_answer_base64", answer_base64)
             self.script = self.session.create_script(script_content)
 
         # 设置控制台消息处理程序
         def on_message(message, data):
             if message['type'] == 'send':
-                # 已拿到二进制解密后的base64
-                encoded_data = message['payload']
-                # 删除所有换行符
-                encoded_data = message.request_str.sub(r'[^A-Za-z0-9+/=]', '', encoded_data)
-                # print("[JS] Received Base64: {}".format(encoded_data))
-                # 解base64
-                result = base64.b64decode(encoded_data).decode('utf-8')
-                self.request_str = result
+                # 已生成加密后的答案base64字符串
+                self.request_str = message['payload']
             else:
                 print("[{}] {}".format(message['type'], message['description']))
 
@@ -93,14 +87,14 @@ class FridaRequestEncrypt:
 
     def _wait_for_sign(self):
         # 这里可以根据具体情况调整等待方式
-        while self.reponse_str is None:
+        while self.request_str is None:
             pass
-        return self.reponse_str
+        return self.request_str
 
 
 # 示例调用
 if __name__ == "__main__":
-    decrypt = FridaRequestEncrypt("com.fenbi.android.leo", "do_answer_encrypt_model.js", None)
-    decrypt.start()
-    reponse_value = decrypt.getstr("此处输入获取到的试题的base64编码")
-    print("reponse value: ", reponse_value)
+    encrypt = FridaRequestEncrypt("com.fenbi.android.leo", "do_answer_encrypt_model.js", None)
+    encrypt.start()
+    request_value = encrypt.get_request_encrypt("此处输入获取到的试题的base64编码")
+    print("加密后答案: ", request_value)

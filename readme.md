@@ -3,9 +3,8 @@
 vue逆向笔记 [frida/readme.md](frida/readme.md)  
 sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 
-# [请查看我们的最新进展](frida/auto_answer/readme.md)
-[待完成的纯协议小猿口算实现模板](frida/auto_answer/readme.md)  
-**对于纯协议版， 现有加密答案脚本不可用,  正在重新写逆向加密脚本**
+# [已实现纯协议小猿口算模板](frida/auto_answer/readme.md)  
+![image](./image/auto_submit.png)
 
 # 关键目录说明
 
@@ -19,6 +18,7 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 |[matchV2_byDataDecryptCommand](frida/matchV2_byDataDecryptCommand)|和`matchV2`同样的功能, 修改获取到的试题包,可修改成一道题任意答案|
 |[submit](frida/submit)|修改提交的答案包,可修改答题耗时|
 |[gan_sign](frida/gan_sign)|生成sign参数, 在未来纯协议发包时有用, 目前没用|  
+|||
 
 
 # 如何复现
@@ -75,31 +75,8 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
     电脑命令行向小猿口算注入xx脚本`frida -U -n 小猿口算 -l .\hook_JsBridgeBean_sign.js`
 
 
-# 进度
-## [关于试题加密](https://github.com/xmexg/xyks/issues/9)
-- 方法一(已可以修改答案):  
-使用[frida/matchV2](/frida/matchV2)目录下的py脚本或ts脚本，他们可以拿到试题和答案
-[do_matchV2_model.py](frida/matchV2/do_matchV2_model.py)示例  
-![image](./image/change_res.png)
-
-    [视频演示](/video/frida_matchV2.mp4)
-
-- 方法二(已可以修改答案):  
-使用[示例模板](frida/matchV2_byDataDecryptCommand)目录下的py脚本或ts脚本，他们可以拿到试题和答案  
-![image](/image/change_json.png)
-
-
-## 已经测试有效的[加载RequestEncoder生成sign方法](frida/gan_sign)
-根据 [taotao5](https://github.com/taotao5) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的hook方向, 现写出:  
-+ [anay_loadRequestEncoder.js](frida/anay_loadRequestEncoder.js) hook分析测试脚本
-+ [gan_sign_model.js](frida/gan_sign/gan_sign_model.js) 生成sign
-+ [gan_sign_model.py](frida/gan_sign/gan_sign_model.py) 提供python调用
-
-
-
-
-## 现状
-已完成:   
+## 
+已完成 (`关键目录说明` 更全一些):   
 + 感谢 [@x781078959](https://github.com/x781078959) 完成[hook解密试题及答案,模拟滑动](frida/matchV2)  
 + 感谢 [@taotao5](https://github.com/taotao5) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的[hook sign](frida/gan_sign)方向
 + 感谢 [@ZQBCWG](https://github.com/ZQBCWG) 在 [https://github.com/cr4n5/XiaoYuanKouSuan/issues/79](https://github.com/cr4n5/XiaoYuanKouSuan/issues/79) 提供hook试题及答案新方向, 实现了查看修改试题及答案, [查看示例模板](frida/matchV2_byDataDecryptCommand) 
