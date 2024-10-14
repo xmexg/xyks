@@ -1,12 +1,12 @@
 # 演示数字比大小获取试题 -> 生成答案 -> 提交答案
 import base64
+import gzip
 import time
 
 import requests
 import json
 from hook.gan_sign.gan_sign_model import FridaSignExtractor # 用于生成sign
 from hook.matchV2_byDataDecryptCommand.do_matchV2_byDataDecryptCommand_model import FridaResponseDecrypt # 用于解密试题
-# from hook.submit.submit_model import FridaSubmit # 用于提交答案
 
 
 # cookies, 后续应该改成先在手机pk一下, hook请求头拿cookie, 既省去抓包, 又可以当未来的cookie实时变化, 通过hook计算
@@ -39,14 +39,14 @@ cookies = {
 获取及解密试题部分
 """
 # 调用gan_sign_model.py模块获取sign
-extractor = FridaSignExtractor("com.fenbi.android.leo", "hook/gan_sign/gan_sign_model.js", None)  # 第3个是小袁口算的pid; 如果知道的话就传pid, 能免去adb查找, 提高效率; 不知道就传None
-extractor.start()  # 初始化并附加到进程
-sign_value = extractor.getsign("/leo-game-pk/android/math/pk/match/v2")  # 获取签名
-print("gan_sign_model sign value:", sign_value)
+getQuestion_extractor = FridaSignExtractor("com.fenbi.android.leo", "hook/gan_sign/gan_sign_model.js", None)  # 第3个是小袁口算的pid; 如果知道的话就传pid, 能免去adb查找, 提高效率; 不知道就传None
+getQuestion_extractor.start()  # 初始化并附加到进程
+getQuestion_sign_value = getQuestion_extractor.getsign("/leo-game-pk/android/math/pk/match/v2")  # 获取签名
+print("gan_sign_model sign value:", getQuestion_sign_value)
 
 # 使用`gan_sign`生成`sign`值, 向`https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?pointId=2&_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=0e40a461631880b0937515fd93fe87b6&deviceCategory=pad`发起post请求
 matchV2_url = ("https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?pointId=2&_productId=611&platform=android32"
-       "&version=3.93.2&vendor=xiao_mi&av=5&sign={}&deviceCategory=pad").format(sign_value)
+       "&version=3.93.2&vendor=xiao_mi&av=5&sign={}&deviceCategory=pad").format(getQuestion_sign_value)
 matchV2_head = {
     "accept": "application/json, text/plain, */*",
     "accept-encoding": "gzip, deflate",
@@ -122,6 +122,31 @@ print("生成答案: ", answer_data)
 
 """
 提交答案部分
+答案gzip压缩一下, 传给服务器
+目标url = https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/submit?_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=2147537776d49902270b5a6b27686beb&deviceCategory=pad
 """
-
-
+# answer_data_base64 = base64.b64encode(answer_data.encode('utf-8'))
+answer_data_gzip = gzip.compress(answer_data.encode('utf-8'))
+answer_data_gzip_base64 = base64.b64encode(answer_data_gzip)
+print(answer_data_gzip)
+upAnswer_extractor = FridaSignExtractor("com.fenbi.android.leo", "hook/gan_sign/gan_sign_model.js", None)  # 第3个是小袁口算的pid; 如果知道的话就传pid, 能免去adb查找, 提高效率; 不知道就传None
+upAnswer_extractor.start()  # 初始化并附加到进程
+upAnswer_sign_value = upAnswer_extractor.getsign("/leo-game-pk/android/math/pk/submit")  # 获取签名
+upAnswer_url = ("https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/submit?_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign={}&deviceCategory=pad").format(upAnswer_sign_value)
+upAnswer_head = {
+    "accept": "application/json, text/plain, */*",
+    "accept-encoding": "gzip, deflate",
+    "accept-language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",
+    "cache-control": "no-cache",
+    "content-type": "application/octet-stream",
+    "origin": "https://xyks.yuanfudao.com",
+    "referer": "https://xyks.yuanfudao.com/bh5/leo-web-oral-pk/result.html?",
+    "user-agent": "Mozilla/5.0 (Linux; Android 12; 2206122SC Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Safari/537.36 YuanSouTiKouSuan/3.93.2",
+    "x-requested-with": "com.fenbi.android.leo",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "cookie": "; ".join([f"{k}={v}" for k, v in cookies.items()])
+}
+upAnswer_response = requests.put(url=upAnswer_url, headers=upAnswer_head, data=answer_data_gzip)
+print(upAnswer_response.text)  # {"timestamp":1728884050091,"status":400,"message":"error"}
