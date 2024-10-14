@@ -86,6 +86,7 @@
 
 待完成(我真不会so逆向)：
 + 对 [会员方法签名](https://github.com/xmexg/xyks/issues/29) 进行研究
++ 根据 [#5](https://github.com/xmexg/xyks/issues/5) [#34](https://github.com/xmexg/xyks/issues/34) 的进展决定是否实现nodejs版无hook协议刷题
 + [@jqjhl](https://github.com/jqjhl) 提供待逆向的加密算法 [fun_001eefc.txt](资料/解密算法/fun_001eefc.txt)
 + [@Amamiyaya](https://github.com/Amamiyaya) 提供 [sign解密算法](资料/解密算法/666.pdf)
 

@@ -13,7 +13,20 @@
 |目录|简介|
 |--|--|
 |[auto_submit_demo](demo/auto_submit_demo)|基础模板, 单线程, 一次性答题, 开发调试使用|
-|[auto_submit_multiprocess_demo](demo/auto_submit_multiprocess_demo)|多线程答题模板, 刷题使用|
+|[auto_submit_multiprocess_demo](demo/auto_submit_multiprocess_demo)|多线程答题模板, 刷题使用(计划中)|
+
+# 说明
+- [auto_submit_demo](demo/auto_submit_demo)项目将作为演示及开发项目, 不作为正式项目使用  
+
+  运行前应检查填写cookie, 你手机发起pk请求时的带参数url和提交答案时的带参数url, 这些参数不同小猿口算app版本, 不同手机, 都有所不同  
+
+  通过hook自动补全cookie和带参url功能将在未来的auto_submit_multiprocess_demo项目中实现
+
+- [auto_submit_multiprocess_demo](demo/auto_submit_multiprocess_demo)项目将作为正式的,带hook的多进程协议刷题项目  
+计划每次运行时应先手动pk一下来捕获cookie,带参url等信息,而后多进程速刷
+
+- [node_submit] 将根据 [#34 用js写了下libContentEncoder的解密](https://github.com/xmexg/xyks/issues/34) 后续发展, 可能会作为无hook协议刷题的nodejs项目  
+只有`libContentEncoder的解密`是不够的, 至少还需要`libRequestEncoder.so`的生成sign算法和`libContentEncoder`的加密算法
 
 # 计划步骤
 [✔] 1. 我们需要写一个发包脚本, 使用`gan_sign`生成`sign`值, 向`https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?pointId=2&_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=0e40a461631880b0937515fd93fe87b6&deviceCategory=pad`发起post

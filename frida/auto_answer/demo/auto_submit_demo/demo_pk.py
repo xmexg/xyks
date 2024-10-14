@@ -1,4 +1,11 @@
 # 演示数字比大小获取试题 -> 生成答案 -> 提交答案
+"""
+该目录将作为演示及开发项目, 不作为正式项目使用
+运行前应检查填写cookie, 你手机发起pk请求时的带参数url和提交答案时的带参数url, 这些参数不同小猿口算app版本, 不同手机, 都可能不同
+
+通过hook自动补全cookie和带参url功能将在未来的auto_submit_multiprocess_demo项目中实现
+"""
+
 import base64
 import gzip
 import time
@@ -20,8 +27,9 @@ import get_cookie
 每过一段时间发生变化的cookie: 
 g_sess, sess
 
-\
+
 只需要填下面3个关键cookie即可
+ks_persistent, sess, userid
 """
 
 cookies = {
@@ -30,12 +38,12 @@ cookies = {
     "g_loc": "",
     "g_sess": "",
     "ks_deviceid": "",
-    "ks_persistent": "",
+    "ks_persistent": "此处必填",
     "ks_sess": "",
     "persistent": "",
-    "sess": "",
+    "sess": "此处必填",
     "sid": "",
-    "userid": ""
+    "userid": "此处必填"
 }
 
 
