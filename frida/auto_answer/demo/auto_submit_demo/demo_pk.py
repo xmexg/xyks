@@ -1,5 +1,6 @@
 # 演示数字比大小获取试题 -> 生成答案 -> 提交答案
 import base64
+import time
 
 import requests
 import json
@@ -38,7 +39,7 @@ cookies = {
 获取及解密试题部分
 """
 # 调用gan_sign_model.py模块获取sign
-extractor = FridaSignExtractor("com.fenbi.android.leo", "hook/gan_sign/gan_sign_model.js")
+extractor = FridaSignExtractor("com.fenbi.android.leo", "hook/gan_sign/gan_sign_model.js", None)  # 第3个是小袁口算的pid; 如果知道的话就传pid, 能免去adb查找, 提高效率; 不知道就传None
 extractor.start()  # 初始化并附加到进程
 sign_value = extractor.getsign("/leo-game-pk/android/math/pk/match/v2")  # 获取签名
 print("gan_sign_model sign value:", sign_value)
@@ -68,34 +69,59 @@ matchV2_response = requests.post(matchV2_url, headers=matchV2_head)
 print("获取到试题未解密大概长度", len(matchV2_response.text))
 # 确认响应的二进制内容 (gpt的迷惑行为)
 binary_content = matchV2_response.content  # 这是二进制数据
-
-"""
-start 此处同webview共同调试
-"""
-def bytes_to_decimal(byte_data):
-    # 将字节数据转换为对应的十进制值
-    decimal_values = [byte for byte in byte_data]
-    return decimal_values
-
-# 输出二进制数字
-bin = bytes_to_decimal(binary_content)
-print(len(bin), bin)
-"""
-end 此处同webview共同调试
-"""
-
 # 将二进制数据进行 Base64 编码
 encoded_content = base64.b64encode(binary_content).decode('utf-8')
-# 再base64一次
-encoded_content = base64.b64encode(encoded_content.encode('utf-8')).decode('utf-8')
-# 原始二进制响应的base64编码
-# print(encoded_content)
+
 
 """
 解密试题部分
 """
-decrypt = FridaResponseDecrypt("com.fenbi.android.leo", "hook/matchV2_byDataDecryptCommand/do_matchV2_byDataDecryptCommand_model.js")
+decrypt = FridaResponseDecrypt("com.fenbi.android.leo", "hook/matchV2_byDataDecryptCommand/do_matchV2_byDataDecryptCommand_model.js", None)  # 第3个是小袁口算的pid; 如果知道的话就传pid, 能免去adb查找, 提高效率; 不知道就传None
 decrypt.start()
-reponse_value = decrypt.getstr(encoded_content)
-print("reponse value: ", reponse_value)
+match_question = decrypt.getstr(encoded_content)
+print("解密试题: ", match_question)
+
+
+"""
+生成答案数据包部分， 这里适配pk答题
+1. 把试题包examVO下的所有内容抄一遍, 变成根
+2. 把correctCnt改成试题数量
+   把costTime改成答题用时
+   把updatedTime改成当前时间戳
+3. 把questions列表下的:
+     每个status改成1
+     每个userAnswer改成answer列表的第0个
+     每个script用户答题痕迹改成"", 不生成用户答题痕迹
+     不要给没加引号的null加上引号, hook调用里会加上引号 // 坑, 未来优化调用要注意
+     加上这样的json:
+        "curTrueAnswer": {
+            "recognizeResult": ">",
+            "pathPoints": [],
+            "answer": 1,
+            "showReductionFraction": 0
+        }
+"""
+match_question_json = json.loads(match_question)
+answer_json = match_question_json["examVO"]
+answer_json["correctCnt"] = answer_json["questionCnt"]
+answer_json["costTime"] = 100
+answer_json["updatedTime"] = int(time.time() * 1000)
+for question in answer_json["questions"]:
+    question["status"] = 1
+    question["userAnswer"] = question["answer"][0]
+    question["script"] = ""
+    question["curTrueAnswer"] = {
+        "recognizeResult": question["answer"][0],
+        "pathPoints": [],
+        "answer": 1,
+        "showReductionFraction": 0
+    }
+answer_data = json.dumps(answer_json, ensure_ascii=False)  # 生成答案数据包
+print("生成答案: ", answer_data)
+
+
+"""
+提交答案部分
+"""
+
 

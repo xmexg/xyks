@@ -4,30 +4,34 @@ import base64
 import frida
 import re
 
+
 class FridaResponseDecrypt:
-    def __init__(self, package_name, js_file_path):
+    # pid可传可不传, 传了提高效率
+    def __init__(self, package_name, js_file_path, pid):
         self.package_name = package_name
         self.js_file_path = js_file_path
         self.device = None
         self.session = None
         self.script = None
         self.reponse_str = None
+        self.pid = pid
 
     def start(self):
         # 通过链接到虚拟机frida-server
         self.device = frida.get_usb_device()
 
-        try:
-            # 获取进程ID
-            process = self.device.get_process(self.package_name)
-            pid = process.pid
-            print(f"找到目标应用，PID: {pid}")
-        except frida.ProcessNotFoundError:
-            # 如果未找到进程，通过 adb 查找 PID
-            print(f"通过 adb 获取应用 '{self.package_name}' 的 PID...")
-            pid = self._get_pid_from_adb()
-            if pid is None:
-                raise Exception(f"未能通过 adb 找到应用 '{self.package_name}' 的 PID")
+        if self.pid is None:
+            try:
+                # 获取进程ID
+                process = self.device.get_process(self.package_name)
+                pid = process.pid
+                print(f"找到目标应用，PID: {pid}")
+            except frida.ProcessNotFoundError:
+                # 如果未找到进程，通过 adb 查找 PID
+                print(f"通过 adb 获取应用 '{self.package_name}' 的 PID...")
+                pid = self._get_pid_from_adb()
+                if pid is None:
+                    raise Exception(f"未能通过 adb 找到应用 '{self.package_name}' 的 PID")
 
         # 附加到进程
         self.session = self.device.attach(pid)
@@ -69,7 +73,7 @@ class FridaResponseDecrypt:
                 encoded_data = message['payload']
                 # 删除所有换行符
                 encoded_data = re.sub(r'[^A-Za-z0-9+/=]', '', encoded_data)
-                print("[JS] Received Base64: {}".format(encoded_data))
+                # print("[JS] Received Base64: {}".format(encoded_data))
                 # 解base64
                 result = base64.b64decode(encoded_data).decode('utf-8')
                 self.reponse_str = result
@@ -94,7 +98,7 @@ class FridaResponseDecrypt:
 
 # 示例调用
 if __name__ == "__main__":
-    decrypt = FridaResponseDecrypt("com.fenbi.android.leo", "do_matchV2_byDataDecryptCommand_model.js")
+    decrypt = FridaResponseDecrypt("com.fenbi.android.leo", "do_matchV2_byDataDecryptCommand_model.js", None)
     decrypt.start()
     reponse_value = decrypt.getstr("此处输入获取到的试题的base64编码")
     print("reponse value: ", reponse_value)

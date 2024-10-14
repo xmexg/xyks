@@ -1,27 +1,21 @@
-"""
-注意传入的url是这样的:
-来自 https://square.github.io/okhttp/3.x/okhttp/okhttp3/HttpUrl.html
-返回此 URL 的完整路径，该路径经过编码后可用于 HTTP 资源解析。返回的路径将以 开头"/"。
-网址	encodedPath()
-http://host/	"/"
-http://host/a/b/c	"/a/b/c"
-http://host/a/b%20c/d	"/a/b%20c/d"
-http://host/a/b/c?d=e	"/a/b/c"
-以/开头, 到#或者?结束(不含#和?)
+# 加密待提交的答案
+# 复制修改于 /frida/auto_answer/demo/auto_submit_demo/hook/matchV2_byDataDecryptCommand/do_matchV2_byDataDecryptCommand_model.py
+# 不可以, 正在重新写逆向加密脚本
 
-直接启动无法获取到进程, 必须先其他小猿口算, 然后adb获取进程pid, 强制附加pid
-"""
+import base64
 
 import frida
 
-class FridaSignExtractor:
+
+class FridaRequestEncrypt:
+    # pid可传可不传, 传了提高效率
     def __init__(self, package_name, js_file_path, pid):
         self.package_name = package_name
         self.js_file_path = js_file_path
         self.device = None
         self.session = None
         self.script = None
-        self.sign = None
+        self.request_str = None
         self.pid = pid
 
     def start(self):
@@ -64,24 +58,27 @@ class FridaSignExtractor:
             print(f"adb 获取 PID 时出错: {e}")
             return None
 
-    def getsign(self, url):
+    def getstr(self, reponse_base64):
         if self.session is None:
             raise Exception("Frida session 尚未初始化。请先调用 start() 方法。")
-
-        # 设置目标url
-        target_url = url
 
         # 加载js文件
         with open(self.js_file_path) as f:
             script_content = f.read()
-            script_content = script_content.replace("flag_url", target_url)
+            script_content = script_content.replace("flag_base64", reponse_base64)
             self.script = self.session.create_script(script_content)
 
         # 设置控制台消息处理程序
         def on_message(message, data):
             if message['type'] == 'send':
-                # 获取sign值
-                self.sign = message['payload']
+                # 已拿到二进制解密后的base64
+                encoded_data = message['payload']
+                # 删除所有换行符
+                encoded_data = message.request_str.sub(r'[^A-Za-z0-9+/=]', '', encoded_data)
+                # print("[JS] Received Base64: {}".format(encoded_data))
+                # 解base64
+                result = base64.b64decode(encoded_data).decode('utf-8')
+                self.request_str = result
             else:
                 print("[{}] {}".format(message['type'], message['description']))
 
@@ -96,14 +93,14 @@ class FridaSignExtractor:
 
     def _wait_for_sign(self):
         # 这里可以根据具体情况调整等待方式
-        while self.sign is None:
+        while self.reponse_str is None:
             pass
-        return self.sign
+        return self.reponse_str
 
 
 # 示例调用
 if __name__ == "__main__":
-    extractor = FridaSignExtractor("com.fenbi.android.leo", "gan_sign_model.js", None)   # 第3个是小袁口算的pid; 如果知道的话就传pid, 能免去adb查找, 提高效率; 不知道就传None
-    extractor.start()
-    sign_value = extractor.getsign("/leo-game-pk/android/math/pk/match/v2")
-    print("Sign value: ", sign_value)
+    decrypt = FridaRequestEncrypt("com.fenbi.android.leo", "do_answer_encrypt_model.js", None)
+    decrypt.start()
+    reponse_value = decrypt.getstr("此处输入获取到的试题的base64编码")
+    print("reponse value: ", reponse_value)

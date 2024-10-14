@@ -55,6 +55,8 @@ def on_message(message, data):
         string = string.replace(r'\"', "%")
         # 修正null不加引号导致的错误
         string = string.replace("null", '"null"')
+        # 万一null已经有引号, 再删掉
+        string = string.replace('""null""', '"null"')
         print("字符串: ", string)
         json_data = json.loads(string)
         print(json_data)

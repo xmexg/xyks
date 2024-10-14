@@ -6,11 +6,10 @@
 修改提交试题答案
 """
 import json
+import sys
 
 import frida
-import sys
-import base64
-import subprocess
+
 
 # 使用 adb 获取 com.fenbi.android.leo 包名的 PID
 def _get_pid_from_adb(package_name):
@@ -32,6 +31,7 @@ def _get_pid_from_adb(package_name):
         print(f"adb 获取 PID 时出错: {e}")
         return None
 
+
 # 获取 PID
 pid = _get_pid_from_adb("com.fenbi.android.leo")
 
@@ -45,6 +45,7 @@ session = device.attach(pid)
 with open("submit_model.js", encoding='utf-8') as f:
     script = session.create_script(f.read())
 
+
 # 设置控制台消息处理程序
 def on_message(message, data):
     if message['type'] == 'send':
@@ -54,6 +55,8 @@ def on_message(message, data):
         string = string.replace(r'\"', "%")
         # 修正null不加引号导致的错误
         string = string.replace("null", '"null"')
+        # 万一其他脚本调用时给null加上了引号, 再删掉
+        string = string.replace('""null""', '"null"')
         print("字符串: ", string)
         json_data = json.loads(string)
         print(json_data)
@@ -68,6 +71,7 @@ def on_message(message, data):
         script.post({'type': 'send', 'my_data': data})
     else:
         print("[{}] {}".format(message['type'], message['description']))
+
 
 # 设置消息处理程序
 script.on('message', on_message)

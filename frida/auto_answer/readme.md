@@ -1,16 +1,16 @@
 # 自动刷题目录
+纯协议小猿口算实现模板 (正在加密答案)
 
 # 现状
 本想写完自动脚本再push的, 但发现事情并不简单  
 
 目前正在解决/无法解决[demo_pk.py](demo/auto_submit_demo/demo_pk.py)  
 
-我python不太好   
+正在加密答案
 
-貌似试题原始响应包到目前DataDecryptCommand hook点之间还有加密?  
-![image](./image/error_utf8.png)
+**现有修改答案脚本不可用, 正在重新写逆向加密脚本**
 
-尝试逆向 [前端试题请求逆向](前端试题请求逆向.md)
+~~尝试逆向 [前端试题请求逆向](前端试题请求逆向.md)~~
 
 # 计划步骤
 1. 我们需要写一个发包脚本, 使用`gan_sign`生成`sign`值, 向`https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?pointId=2&_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=0e40a461631880b0937515fd93fe87b6&deviceCategory=pad`发起post
