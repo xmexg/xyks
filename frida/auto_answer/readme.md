@@ -1,5 +1,5 @@
 # 自动刷题目录
-纯协议小猿口算实现模板 (正在加密答案)
+纯协议小猿口算实现模板
 
 # 现状
 已实现纯协议答题模板
@@ -8,6 +8,12 @@
 ~~已经逆向答案加密, 准备实现中 [加密答案分析](../anay_answerEncrypt.js)~~
 
 ~~尝试逆向 [前端试题请求逆向](前端试题请求逆向.md)~~
+
+# 目录
+|目录|简介|
+|--|--|
+|[auto_submit_demo](demo/auto_submit_demo)|基础模板, 单线程, 一次性答题, 开发调试使用|
+|[auto_submit_multiprocess_demo](demo/auto_submit_multiprocess_demo)|多线程答题模板, 刷题使用|
 
 # 计划步骤
 [✔] 1. 我们需要写一个发包脚本, 使用`gan_sign`生成`sign`值, 向`https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?pointId=2&_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=0e40a461631880b0937515fd93fe87b6&deviceCategory=pad`发起post
@@ -18,11 +24,10 @@
 
 [✔] 4. 我们需要修改[submit](../submit), 使其能够接收我们生成的答案包, 将答案包加密成服务器认可的二进制格式
 
-[✔] 5. 向`https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/submit?_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=47d140c9a28f4d0343dfb9f109c93b2e&deviceCategory=pad`发包
+[✔] 5. 向`https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/submit?_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=47d140c9a28f4d0343dfb9f109c93b2e&deviceCategory=pad`发包完成答题  
 
 [✘] 6. 根据get_cookie.js文件，修改后可获得相应Cookie，将其传入demo_pk.py的几个部分即可实现全协议结算作答。
 
-这里每一步都是巨坑
 
 # 回顾
 - 解试题包加密  
@@ -34,5 +39,3 @@
 
 - 解提交包  
   [submit](../submit) 于2024年10月13日(日)凌晨1时完成
-
-# 佬们，要写不完了，我周一周二满课

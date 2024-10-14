@@ -1,9 +1,7 @@
 # 小猿口算
-未完成的逆向笔记  
-vue逆向笔记 [frida/readme.md](frida/readme.md)  
-sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
+不完全完成的逆向笔记  
 
-# [已实现纯协议小猿口算模板](frida/auto_answer/readme.md)  
+# [已实现纯协议小猿口算模板](frida/auto_answer)  
 ![image](./image/auto_submit.png)
 
 # 关键目录说明
@@ -17,8 +15,10 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 |[matchV2](frida/matchV2)|修改获取到的试题包,可修改成一道题任意答案|
 |[matchV2_byDataDecryptCommand](frida/matchV2_byDataDecryptCommand)|和`matchV2`同样的功能, 修改获取到的试题包,可修改成一道题任意答案|
 |[submit](frida/submit)|修改提交的答案包,可修改答题耗时|
-|[gan_sign](frida/gan_sign)|生成sign参数, 在未来纯协议发包时有用, 目前没用|  
-|||
+|[gan_sign](frida/gan_sign)|生成sign参数, 协议发包用|
+|[get_cookie](frida/get_cookie)|获取cookie, 协议发包用|
+|[answer_encrypt](frida/answer_encrypt)|加密答案, 协议发包用|
+|[auto_answer](frida/auto_answer)|协议发包|
 
 
 # 如何复现
@@ -40,7 +40,7 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
     ```
     即可运行frida，到此adb结束。  
 
-    注意不要退出powershell或者cmd的窗口
+    注意不要退出powershell或者cmd的窗口  
     ![image](https://github.com/user-attachments/assets/4d0570db-4b13-4f50-b48a-bdb30eee24a4)
 
 ## webview复现
@@ -85,6 +85,7 @@ sign逆向笔记 [frida/sign_decrypt.md](frida/sign_decrypt.md)
 + 感谢 [@taotao5](https://github.com/taotao5) 在 [#28](https://github.com/xmexg/xyks/issues/28) 指出的协议脚本的解题错误
 
 待完成(我真不会so逆向)：
++ 对 [会员方法签名](https://github.com/xmexg/xyks/issues/29) 进行研究
 + [@jqjhl](https://github.com/jqjhl) 提供待逆向的加密算法 [fun_001eefc.txt](资料/解密算法/fun_001eefc.txt)
 + [@Amamiyaya](https://github.com/Amamiyaya) 提供 [sign解密算法](资料/解密算法/666.pdf)
 
