@@ -12,17 +12,17 @@ cookie_type = 1
 ks_persistent, sess, userid
 """
 cookies = {
-    "YFD_U": "-3211421434165909800",
-    "__sub_user_infos__": "/24T7Ovgtuud9LSYuz4IE8QXC8WtncTejJIS1NgUsGUc8dJri87nwxAR7ZYZSGLMzASpBTOcRDDcGj5XRSh1wQ==",
-    "g_loc": "vPeteFfrRL2jJ0VNIL3TWQ==",
-    "g_sess": "mNlruvzVSah744XpRWZwrJnSf85irHQXWZNUGSn27yzqcVC4X47xgec3wZzaHdpycmhggh4Nc/ETKNNMvV6z+l9HmLXdNf7tLzzWJYrgsC55vyiiufCCQNT8ynqqTJPG",
-    "ks_deviceid": "264747485",
-    "ks_persistent": "E7HkOGfEedeolQpPvUgvctiPZ1hsCdgCrWumlSnrg10fRR9HYdofd0CBlxMTQcI8J7tQGTZoCoUi1nDWMDPuw7GN5JOGpwpJ+6HADJ+6BeY=",
-    "ks_sess": "+aI8wF/5r4paFMXzig5QgEPWtR3TDnSVQ2eV1eGhImwT/41ip5vnvURH8V1LdJxz",
-    "persistent": "EPLFTB7BUdycG28sjEfjTHAPCWlrbTYUyPUdrydyp42z3wiXT9eIussNNc+8BoWua49Wf+i8fY2M/nXqZLBd6w==",
-    "sess": "mNlruvzVSah744XpRWZwrJnSf85irHQXWZNUGSn27yzqcVC4X47xgec3wZzaHdpycmhggh4Nc/ETKNNMvV6z+mAQCs8XGPVbybOXWsQ6NLc=",
-    "sid": "4442320405456624390",
-    "userid": "1052996838"
+    "YFD_U": "",
+    "__sub_user_infos__": "",
+    "g_loc": "",
+    "g_sess": "",
+    "ks_deviceid": "",
+    "ks_persistent": "此处必填",
+    "ks_sess": "",
+    "persistent": "",
+    "sess": "此处必填",
+    "sid": "",
+    "userid": "此处必填"
 }
 
 """
