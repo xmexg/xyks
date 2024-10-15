@@ -1,4 +1,7 @@
 # 只适配了比大小口算pk, 其他未测试
+from answer import Student
+import concurrent.futures
+import time
 
 # 如何读取cookie: 0:读取cookies_model, 1:通过hook读取(还未实现)
 cookie_type = 1
@@ -9,17 +12,17 @@ cookie_type = 1
 ks_persistent, sess, userid
 """
 cookies = {
-    "YFD_U": "",
-    "__sub_user_infos__": "",
-    "g_loc": "",
-    "g_sess": "",
-    "ks_deviceid": "",
-    "ks_persistent": "此处必填",
-    "ks_sess": "",
-    "persistent": "",
-    "sess": "此处必填",
-    "sid": "",
-    "userid": "此处必填"
+    "YFD_U": "-3211421434165909800",
+    "__sub_user_infos__": "/24T7Ovgtuud9LSYuz4IE8QXC8WtncTejJIS1NgUsGUc8dJri87nwxAR7ZYZSGLMzASpBTOcRDDcGj5XRSh1wQ==",
+    "g_loc": "vPeteFfrRL2jJ0VNIL3TWQ==",
+    "g_sess": "mNlruvzVSah744XpRWZwrJnSf85irHQXWZNUGSn27yzqcVC4X47xgec3wZzaHdpycmhggh4Nc/ETKNNMvV6z+l9HmLXdNf7tLzzWJYrgsC55vyiiufCCQNT8ynqqTJPG",
+    "ks_deviceid": "264747485",
+    "ks_persistent": "E7HkOGfEedeolQpPvUgvctiPZ1hsCdgCrWumlSnrg10fRR9HYdofd0CBlxMTQcI8J7tQGTZoCoUi1nDWMDPuw7GN5JOGpwpJ+6HADJ+6BeY=",
+    "ks_sess": "+aI8wF/5r4paFMXzig5QgEPWtR3TDnSVQ2eV1eGhImwT/41ip5vnvURH8V1LdJxz",
+    "persistent": "EPLFTB7BUdycG28sjEfjTHAPCWlrbTYUyPUdrydyp42z3wiXT9eIussNNc+8BoWua49Wf+i8fY2M/nXqZLBd6w==",
+    "sess": "mNlruvzVSah744XpRWZwrJnSf85irHQXWZNUGSn27yzqcVC4X47xgec3wZzaHdpycmhggh4Nc/ETKNNMvV6z+mAQCs8XGPVbybOXWsQ6NLc=",
+    "sid": "4442320405456624390",
+    "userid": "1052996838"
 }
 
 """
@@ -43,3 +46,44 @@ hook_script = {
 }
 
 print(hook_script["jsFilePath_getSign"])
+
+"""
+单次测试执行
+"""
+# student = Student(cookies, url, "com.fenbi.android.leo", hook_script)
+# student.answer()
+
+
+# 封装执行逻辑的函数
+def execute_student_task(cookies, url, hook_script):
+    try:
+        student = Student(cookies, url, "com.fenbi.android.leo", hook_script)
+        student.answer()
+    except Exception as e:
+        print(f"Error occurred: {e}")
+
+
+# 创建30个进程池，每个进程池不断执行任务
+def run_student_tasks(cookies, url, hook_script, num_processes=30, timeout=5):
+    with concurrent.futures.ProcessPoolExecutor(max_workers=num_processes) as executor:
+        while True:
+            # 提交任务到进程池中
+            futures = [executor.submit(execute_student_task, cookies, url, hook_script) for _ in range(num_processes)]
+
+            # 监控每个任务的状态
+            for future in concurrent.futures.as_completed(futures, timeout=timeout):
+                try:
+                    # 尝试获取任务结果，设置超时时间
+                    future.result(timeout=timeout)
+                except concurrent.futures.TimeoutError:
+                    print(f"Task timeout after {timeout} seconds.")
+                except Exception as e:
+                    print(f"Task failed with error: {e}")
+                finally:
+                    # 在任务完成、出错或者超时后，继续重新提交任务
+                    futures.append(executor.submit(execute_student_task, cookies, url, hook_script))
+
+
+if __name__ == '__main__':
+    # 开始运行任务
+    run_student_tasks(cookies, url, hook_script)

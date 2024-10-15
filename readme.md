@@ -4,6 +4,9 @@
 # [已实现纯协议小猿口算模板](frida/auto_answer)  
 ![image](./image/auto_submit.png)
 
+# [已实现纯协议多进程速刷](frida/auto_answer)  
+<video controls src="./video/demo_auto_snswer.mp4" title="纯协议多进程速刷"></video>
+
 # 关键目录说明
 
 |目录|功能|

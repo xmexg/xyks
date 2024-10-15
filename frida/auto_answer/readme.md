@@ -2,8 +2,11 @@
 纯协议小猿口算实现模板
 
 # 现状
-已实现纯协议答题模板
+## 已实现纯协议答题模板
 ![image](./image/auto_submit.png)
+
+## [已实现纯协议多进程速刷](frida/auto_answer)  
+<video controls src="./video/demo_auto_snswer.mp4" title="纯协议多进程速刷"></video>
 
 ~~已经逆向答案加密, 准备实现中 [加密答案分析](../anay_answerEncrypt.js)~~
 

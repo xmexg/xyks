@@ -72,6 +72,10 @@ class FridaLoader:
             print(f"adb 获取 PID 时出错: {e}")
             return None
 
+    """
+    获取sign值
+    """
+
     def get_sign(self, url):
         if self.session is None:
             raise Exception("Frida session 尚未初始化。请先调用 start() 方法。")
@@ -110,6 +114,9 @@ class FridaLoader:
         self.sign = None
         return sign
 
+    """
+    解密试题
+    """
     def get_question(self, reponse_base64):
         if self.session is None:
             raise Exception("Frida session 尚未初始化。请先调用 start() 方法。")
@@ -134,6 +141,15 @@ class FridaLoader:
             else:
                 print("[{}] {}".format(message['type'], message['description']))
 
+        # 设置消息处理程序
+        self.script.on('message', on_message)
+
+        # 加载js文件并获取脚本输出的信息
+        self.script.load()
+
+        # 等待脚本执行完成并返回sign
+        return self._wait_for_reponse_str()
+
     def _wait_for_reponse_str(self):
         # 这里可以根据具体情况调整等待方式
         while self.reponse_str is None:
@@ -142,6 +158,9 @@ class FridaLoader:
         self.reponse_str = None
         return reponse_str
 
+    """
+    加密答案
+    """
     def get_request_encrypt(self, answer_base64):
         if self.session is None:
             raise Exception("Frida session 尚未初始化。请先调用 start() 方法。")

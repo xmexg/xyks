@@ -13,6 +13,7 @@ import time
 import requests
 import json
 
+import urllib3
 from termcolor import colored
 from urllib3.exceptions import InsecureRequestWarning
 
@@ -33,17 +34,17 @@ ks_persistent, sess, userid
 """
 
 cookies = {
-    "YFD_U": "",
-    "__sub_user_infos__": "",
-    "g_loc": "",
-    "g_sess": "",
-    "ks_deviceid": "",
-    "ks_persistent": "此处必填",
-    "ks_sess": "",
-    "persistent": "",
-    "sess": "此处必填",
-    "sid": "",
-    "userid": "此处必填"
+    "YFD_U": "-3211421434165909800",
+    "__sub_user_infos__": "/24T7Ovgtuud9LSYuz4IE8QXC8WtncTejJIS1NgUsGUc8dJri87nwxAR7ZYZSGLMzASpBTOcRDDcGj5XRSh1wQ==",
+    "g_loc": "vPeteFfrRL2jJ0VNIL3TWQ==",
+    "g_sess": "mNlruvzVSah744XpRWZwrJnSf85irHQXWZNUGSn27yzqcVC4X47xgec3wZzaHdpycmhggh4Nc/ETKNNMvV6z+l9HmLXdNf7tLzzWJYrgsC55vyiiufCCQNT8ynqqTJPG",
+    "ks_deviceid": "264747485",
+    "ks_persistent": "E7HkOGfEedeolQpPvUgvctiPZ1hsCdgCrWumlSnrg10fRR9HYdofd0CBlxMTQcI8J7tQGTZoCoUi1nDWMDPuw7GN5JOGpwpJ+6HADJ+6BeY=",
+    "ks_sess": "+aI8wF/5r4paFMXzig5QgEPWtR3TDnSVQ2eV1eGhImwT/41ip5vnvURH8V1LdJxz",
+    "persistent": "EPLFTB7BUdycG28sjEfjTHAPCWlrbTYUyPUdrydyp42z3wiXT9eIussNNc+8BoWua49Wf+i8fY2M/nXqZLBd6w==",
+    "sess": "mNlruvzVSah744XpRWZwrJnSf85irHQXWZNUGSn27yzqcVC4X47xgec3wZzaHdpycmhggh4Nc/ETKNNMvV6z+mAQCs8XGPVbybOXWsQ6NLc=",
+    "sid": "4442320405456624390",
+    "userid": "1052996838"
 }
 
 
@@ -55,10 +56,11 @@ getQuestion_extractor = FridaSignExtractor("com.fenbi.android.leo", "hook/gan_si
 getQuestion_extractor.start()  # 初始化并附加到进程
 getQuestion_sign_value = getQuestion_extractor.getsign("/leo-game-pk/android/math/pk/match/v2")  # 获取签名
 print("gan_sign_model sign value:", getQuestion_sign_value)
+# 禁用安全请求警告, 有的版本的requests会报警告
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # 使用`gan_sign`生成`sign`值, 向`https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?pointId=2&_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign=0e40a461631880b0937515fd93fe87b6&deviceCategory=pad`发起post请求
-matchV2_url = ("https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?"
-               "pointId=69&_productId=611&platform=android32&version=3.93.3&vendor=baidu&av=5&"
-               "sign={}&deviceCategory=phone").format(getQuestion_sign_value)
+matchV2_url = ("https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?pointId=2&_productId=611&platform=android32&version=3.93.2&vendor=xiao_mi&av=5&sign={}&deviceCategory=pad").format(getQuestion_sign_value)
+# matchV2_url = ("https://xyks.yuanfudao.com/leo-game-pk/android/math/pk/match/v2?pointId=69&_productId=611&platform=android32&version=3.93.3&vendor=baidu&av=5&sign={}&deviceCategory=phone").format(getQuestion_sign_value)
 # TODO 注意此处的version、vendor
 matchV2_head = {
     "accept": "application/json, text/plain, */*",
@@ -68,19 +70,17 @@ matchV2_head = {
     "content-type": "application/x-www-form-urlencoded",
     "origin": "https://xyks.yuanfudao.com",
     "pragma": "no-cache",
-    "referer": "https://xyks.yuanfudao.com/bh5/leo-web-oral-pk/exercise.html?"
-               "pointId=69&isFromInvite=undefined&_productId=611&vendor=baidu&phaseId=3&from=yuansoutikousuan&"
-               "YFD_U=自己填或者从get_cookies文件中拿&version=3.93.3&siwr=false&keypath=",
-    # TODO 注意此处的YFD_U、vendor、version
+    "referer": "https://xyks.yuanfudao.com/bh5/leo-web-oral-pk/exercise.html?",
+    # referer不用填全
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "same-origin",
     "user-agent": "Mozilla/5.0 (Linux; Android 12; SDY-AN00 Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36 YuanSouTiKouSuan/3.93.3",
-    # TODO 注意此处的user-agent也是从get_cookies文件中拿
+    # user-agent有就行, 不用对应版本
     "x-requested-with": "com.fenbi.android.leo",
     "cookie": "; ".join([f"{k}={v}" for k, v in cookies.items()])
 }
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+# requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 # 发起post请求
 matchV2_response = requests.post(matchV2_url, headers=matchV2_head, verify=False)
 # 输出返回结果长度, 应注意这是二进制乱码, 长度仅供参考有无获取成功, pk试题一般在400-500左右

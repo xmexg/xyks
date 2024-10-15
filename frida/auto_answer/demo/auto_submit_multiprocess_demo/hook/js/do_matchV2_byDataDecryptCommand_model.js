@@ -1,4 +1,4 @@
-console.log("[do_matchV2_byDataDecryptCommand_model] script loaded successfully");
+//console.log("[do_matchV2_byDataDecryptCommand_model] script loaded successfully");
 
 /**
  * 这里完全改了
