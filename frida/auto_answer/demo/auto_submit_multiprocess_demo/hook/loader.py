@@ -84,7 +84,7 @@ class FridaLoader:
         target_url = url
 
         # 加载js文件
-        with open(self.js_file_path_getSign) as f:
+        with open(self.js_file_path_getSign, encoding="utf-8") as f:
             script_content = f.read()
             script_content = script_content.replace("flag_url", target_url)
             self.script = self.session.create_script(script_content)
@@ -166,7 +166,7 @@ class FridaLoader:
             raise Exception("Frida session 尚未初始化。请先调用 start() 方法。")
 
         # 加载js文件
-        with open(self.do_answer_encrypt) as f:
+        with open(self.do_answer_encrypt, encoding="utf-8") as f:
             script_content = f.read()
             script_content = script_content.replace("flag_answer_base64", answer_base64)
             self.script = self.session.create_script(script_content)
