@@ -22,6 +22,7 @@
 |[get_cookie](frida/get_cookie)|获取cookie, 协议发包用|
 |[answer_encrypt](frida/answer_encrypt)|加密答案, 协议发包用|
 |[auto_answer](frida/auto_answer)|协议发包|
+|[anay_vip.js](frida/anay_vip.js)|研究任意修改本地vip会员到期时间,只是本地会员|
 
 
 # 如何复现
@@ -79,16 +80,16 @@
 
 
 ## 
-已完成 (`关键目录说明` 更全一些):   
+已解决 (`关键目录说明` 更全一些):   
 + 感谢 [@x781078959](https://github.com/x781078959) 完成[hook解密试题及答案,模拟滑动](frida/matchV2)  
 + 感谢 [@taotao5](https://github.com/taotao5) 在 [#9](https://github.com/xmexg/xyks/issues/9) 提供的[hook sign](frida/gan_sign)方向
 + 感谢 [@ZQBCWG](https://github.com/ZQBCWG) 在 [https://github.com/cr4n5/XiaoYuanKouSuan/issues/79](https://github.com/cr4n5/XiaoYuanKouSuan/issues/79) 提供hook试题及答案新方向, 实现了查看修改试题及答案, [查看示例模板](frida/matchV2_byDataDecryptCommand) 
 + 感谢 [@x781078959](https://github.com/x781078959) 指出异步调用导致js在获取到py传入的新题库前return导致无法修改试题及答案的bug
 + 感谢 [@Hawcett](https://github.com/Hawcett) 分享的 [XiaoYuanKouSuan_Frida_hook](https://github.com/Hawcett/XiaoYuanKouSuan_Frida_hook), 已实现[修改提交答案数据包](frida/submit)
 + 感谢 [@taotao5](https://github.com/taotao5) 在 [#28](https://github.com/xmexg/xyks/issues/28) 指出的协议脚本的解题错误
++ 感谢 [@xiaou61](https://github.com/xiaou61) 在 https://github.com/cr4n5/XiaoYuanKouSuan/issues/111 指出的编码问题
 
 待完成(我真不会so逆向)：
-+ 对 [会员方法签名](https://github.com/xmexg/xyks/issues/29) 进行研究
 + 根据 [#5](https://github.com/xmexg/xyks/issues/5) [#34](https://github.com/xmexg/xyks/issues/34) 的进展决定是否实现nodejs版无hook协议刷题
 + [@jqjhl](https://github.com/jqjhl) 提供待逆向的加密算法 [fun_001eefc.txt](资料/解密算法/fun_001eefc.txt)
 + [@Amamiyaya](https://github.com/Amamiyaya) 提供 [sign解密算法](资料/解密算法/666.pdf)
@@ -97,6 +98,12 @@
 + 修改数据包欺骗服务器做题耗时: https://github.com/Hawcett/XiaoYuanKouSuan_Frida_hook
 + 小猿搜题冲榜/刷排名/专用思路一s2w分: https://github.com/xiaou61/XiaoYuanKousuan
 + 控制跳转,瞬间提交: https://github.com/FoskyM/XiaoYuanKouSuan_Tutorial
+
+其他:
++ 对 [#29 修改会员](https://github.com/xmexg/xyks/issues/29) 进行[研究](./frida/anay_vip.js)  
+  可能可以设置本地会员到期时间为9999年12月31日, 也可能不显示,   
+  我在2024年10月15日18点前能修改会员到期时间, 尝试修改`studyGroupRightInfo`后反而失效了
+  
 
 推荐链接
 + 全国每日榜: https://xyks.yuanfudao.com/bh5/leo-web-config-activity/activity.html?orionKey=leo.activity.config.picture.v5&_productId=611#/
