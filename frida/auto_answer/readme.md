@@ -6,7 +6,7 @@
 ![image](./image/auto_submit.png)
 
 ## [已实现纯协议多进程速刷](frida/auto_answer)  
-<video controls src="./video/demo_auto_snswer.mp4" title="纯协议多进程速刷"></video>
+[点击查看纯协议多进程速刷](https://github.com/user-attachments/assets/bc1974af-463b-45cf-92bf-1f778cb27826)
 
 ~~已经逆向答案加密, 准备实现中 [加密答案分析](../anay_answerEncrypt.js)~~
 
