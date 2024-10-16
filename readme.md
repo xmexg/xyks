@@ -7,6 +7,8 @@
 # [已实现纯协议多进程速刷](frida/auto_answer)  
 [点击查看纯协议多进程速刷](https://github.com/user-attachments/assets/bc1974af-463b-45cf-92bf-1f778cb27826)
 
+[演示5分钟上到1万分](./video/demo_10000.mp4)
+
 # 关键目录说明
 
 |目录|功能|

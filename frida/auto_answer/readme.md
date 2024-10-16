@@ -16,7 +16,7 @@
 |目录|简介|
 |--|--|
 |[auto_submit_demo](demo/auto_submit_demo)|基础模板, 单线程, 一次性答题, 开发调试使用|
-|[auto_submit_multiprocess_demo](demo/auto_submit_multiprocess_demo)|多线程答题模板, 刷题使用(计划中)|
+|[auto_submit_multiprocess_demo](demo/auto_submit_multiprocess_demo)|多线程答题模板, 刷题使用|
 
 # 说明
 - [auto_submit_demo](demo/auto_submit_demo)项目将作为演示及开发项目, 不作为正式项目使用  
@@ -26,7 +26,7 @@
   通过hook自动补全cookie和带参url功能将在未来的auto_submit_multiprocess_demo项目中实现
 
 - [auto_submit_multiprocess_demo](demo/auto_submit_multiprocess_demo)项目将作为正式的,带hook的多进程协议刷题项目  
-计划每次运行时应先手动pk一下来捕获cookie,带参url等信息,而后多进程速刷
+计划 ~~~每次运行时应先手动pk一下来捕获cookie,带参url等信息,~~~~ 而后多进程速刷
 
 - [node_submit] 将根据 [#34 用js写了下libContentEncoder的解密](https://github.com/xmexg/xyks/issues/34) 后续发展, 可能会作为无hook协议刷题的nodejs项目  
 只有`libContentEncoder的解密`是不够的, 至少还需要`libRequestEncoder.so`的生成sign算法和`libContentEncoder`的加密算法

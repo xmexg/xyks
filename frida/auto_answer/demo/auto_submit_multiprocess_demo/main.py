@@ -1,10 +1,14 @@
 # 只适配了比大小口算pk, 其他未测试
+import argparse
+
 from answer import Student
 import concurrent.futures
 import time
 
-# 如何读取cookie: 0:读取cookies_model, 1:通过hook读取(还未实现)
-cookie_type = 1
+"""
+通过 python main.py 启动时需要自己填写cookie和url
+通过 python main.py --hookcookie 启动时会自动获取cookie和url
+"""
 
 """
 请填写cookie
@@ -50,6 +54,8 @@ print(hook_script["jsFilePath_getSign"])
 """
 单次测试执行
 """
+
+
 # student = Student(cookies, url, "com.fenbi.android.leo", hook_script)
 # student.answer()
 
@@ -68,22 +74,54 @@ def run_student_tasks(cookies, url, hook_script, num_processes=30, timeout=5):
     with concurrent.futures.ProcessPoolExecutor(max_workers=num_processes) as executor:
         while True:
             # 提交任务到进程池中
-            futures = [executor.submit(execute_student_task, cookies, url, hook_script) for _ in range(num_processes)]
+            futures = {executor.submit(execute_student_task, cookies, url, hook_script): idx for idx in
+                       range(num_processes)}
 
             # 监控每个任务的状态
-            for future in concurrent.futures.as_completed(futures, timeout=timeout):
+            done, not_done = concurrent.futures.wait(futures, timeout=timeout,
+                                                     return_when=concurrent.futures.FIRST_COMPLETED)
+
+            # 处理完成的任务
+            for future in done:
                 try:
-                    # 尝试获取任务结果，设置超时时间
-                    future.result(timeout=timeout)
+                    result = future.result()  # 获取任务结果
                 except concurrent.futures.TimeoutError:
                     print(f"Task timeout after {timeout} seconds.")
                 except Exception as e:
                     print(f"Task failed with error: {e}")
                 finally:
-                    # 在任务完成、出错或者超时后，继续重新提交任务
-                    futures.append(executor.submit(execute_student_task, cookies, url, hook_script))
+                    # 重新提交完成或失败的任务
+                    futures[executor.submit(execute_student_task, cookies, url, hook_script)] = futures[future]
+
+            # 处理超时未完成的任务
+            for future in not_done:
+                if future.running():
+                    future.cancel()  # 取消超时任务
+                    print(f"Task exceeded {timeout} seconds and was cancelled.")
+                    # 重新提交被取消的任务
+                    futures[executor.submit(execute_student_task, cookies, url, hook_script)] = futures[future]
 
 
-if __name__ == '__main__':
-    # 开始运行任务
+def hook_cookie():
+    print("通过hook拿cookie和请求url参数方法暂不可用, 请手动填写cookie和url")
+    exit(1)
+
+
+def main():
+    # 创建 ArgumentParser 对象并添加参数
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--hookcookie', action='store_true', help='Run hookcookie method if specified')
+
+    # 解析命令行参数
+    args = parser.parse_args()
+
+    # 如果传入了 --hookcookie 参数，执行 hook_cookie 函数
+    if args.hookcookie:
+        hook_cookie()
+
+    # 传递cookies, url, hook_script参数并开始运行任务
     run_student_tasks(cookies, url, hook_script)
+
+
+if __name__ == "__main__":
+    main()
