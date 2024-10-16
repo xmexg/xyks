@@ -31,12 +31,27 @@ pip install -r requirements.txt
     - **通过 python main.py 启动时需要自己填写cookie和url**  
    使用此命令运行前需要修改[main.py](main.py)里的cookie和url  
    自行抓包cookie和获取试题和提交答案时的完整url   
-    ```shell
-    python main.py
-    ```
+        ```shell
+        python main.py
+        ```
    
    - **通过 python main.py --hookcookie 启动后会自动获取cookie和url**  
      由于`小猿口算`app最终请求获取答案和请求提交答案是在vue网页实现的,目前没有在java中找到替代的hook点  
      该方法暂不可用    
    ~~使用此命令运行后需要自己先去手动pk一下, 以获取cookie和url, 已修补pk试题为1道题, 答案是1, pk用时0.1s~~  
-    ~~`python main.py --hookcookie`~~
+       ```
+       python main.py --hookcookie
+       ```
+
+   - **通过添加`--fakeq=3`参数可以修改试题数量,快速刷分,默认为1,最高为3,再高不计成绩**  
+        ```shell
+        python main.py --fakeq=1
+        ```
+   - **通过`--processes=20`参数可设置进程数量,默认20,太高会卡,多进程刷分**
+       ```shell
+       python main.py --processes=20
+       ```
+   - **不同参数可组合使用
+       ```shell
+       python main.py --fakeq=3 --processes=20
+       ```

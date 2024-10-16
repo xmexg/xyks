@@ -1,3 +1,6 @@
+import argparse
+import copy
+
 import urllib3
 
 from hook.loader import FridaLoader
@@ -38,12 +41,13 @@ class Student:
     # print("加密后答案: ", request_value)
     """
 
-    def __init__(self, cookie, url, package_name, hook_script):
+    def __init__(self, cookie, url, package_name, hook_script, arg):
         self.fridaLoader = FridaLoader(package_name, None, hook_script)
         self.fridaLoader.start()
         self.cookies = cookie
         self.url = url
         self.hook_script = hook_script
+        self.arg = arg
 
     def answer(self):
         print("开始新一轮答题")
@@ -110,23 +114,39 @@ class Student:
                     "answer": 1,
                     "showReductionFraction": 0
                 }
+                
+        2024年10月16日新增修补试题数量功能, 更快速刷分
         """
+        # 试题倍数
+        q_magn = self.arg["q_magn"]
+
         match_question_json = json.loads(match_question)
         answer_json = match_question_json["examVO"]
+        right_questionCnt = answer_json["questionCnt"]
+        answer_json["questionCnt"] = answer_json["questionCnt"] * q_magn
         answer_json["correctCnt"] = answer_json["questionCnt"]
         answer_json["costTime"] = 100
         answer_json["updatedTime"] = int(time.time() * 1000)
-        for question in answer_json["questions"]:
-            question["status"] = 1
-            question["userAnswer"] = question["answer"][0]
-            question["script"] = ""
-            question["curTrueAnswer"] = {
-                "recognizeResult": question["answer"][0],
-                "pathPoints": [],
-                "answer": 1,
-                "showReductionFraction": 0
-            }
-        answer_data = json.dumps(answer_json, ensure_ascii=False)  # 生成答案数据包
+        perpare_answer_questions = answer_json["questions"]  # 存下原有的试题模板
+        answer_json["questions"] = []  # 清空试题
+        for_questionCnt = 0  # 修改试题id, 这样写可保证无论如何都不会出错
+        for i in range(q_magn):
+            for question in perpare_answer_questions:
+                new_question = copy.deepcopy(question)  # 深拷贝每个题目，确保对象独立
+                new_question["id"] = for_questionCnt
+                new_question["status"] = 1
+                new_question["userAnswer"] = new_question["answer"][0]
+                new_question["script"] = ""
+                new_question["curTrueAnswer"] = {
+                    "recognizeResult": new_question["answer"][0],
+                    "pathPoints": [],
+                    "answer": 1,
+                    "showReductionFraction": 0
+                }
+                for_questionCnt = for_questionCnt + 1
+                answer_json["questions"].append(new_question)  # 生成答案数据包
+
+        answer_data = json.dumps(answer_json, ensure_ascii=False)
         print(colored("生成答案: ", 'red') + answer_data)
 
         """
@@ -175,9 +195,23 @@ if __name__ == "__main__":
         "jsFilePath_doAnswerEncrypt": "hook/js/do_answer_encrypt_model.js"
     }
 
+    """
+    存放一些答题脚本的启动参数
+    """
+    arg = {
+
+        """
+        默认试题倍数, 
+        比如默认为1, 收到10道题, 提交10道题
+        修改成20, 收到10道题, 提交200道题
+        可通过启动参数python main.py --fakeq=20进行修改
+        """
+        "q_magn": 1
+    }
+
     # 初始化
     # 第2个是小猿口算的pid; 如果知道的话就传pid, 能免去adb查找, 提高效率; 不知道就传None
-    fridaLoader = FridaLoader("com.fenbi.android.leo", None, hook_script)
+    fridaLoader = FridaLoader("com.fenbi.android.leo", None, hook_script, arg)
     fridaLoader.start()
 
     # 获取sign值

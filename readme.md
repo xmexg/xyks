@@ -7,7 +7,10 @@
 # [已实现纯协议多进程速刷](frida/auto_answer)  
 [点击查看纯协议多进程速刷](https://github.com/user-attachments/assets/bc1974af-463b-45cf-92bf-1f778cb27826)
 
-[演示5分钟上到1万分](./video/demo_10000.mp4)
+[演示5分钟上到1万分](./video/demo_10000.mp4) 已经过时啦， 通过调整试题倍率，得分速度又翻了3倍，倍率最高为3，再高不计成绩
+
+现在瓶颈是cpu和代码执行效率了  
+![auto_submit_cpu](image/auto_submit_cpu.png)
 
 # 关键目录说明
 
