@@ -17,8 +17,10 @@ from urllib.parse import urlparse
 """
 python务必使用进程 而不是线程
 我python不太好, 请务必不要全局只new一个FridaLoader, FridaLoader内的sign,解密试题, 加密答案可能多进程时会相互覆盖
-目前是每个进程分配一个FridaLoader, 但是这样会导致每个进程都要重新附加, 会比较慢, 当然, 进程够多, 无所谓FridaLoader的new速度了, 整体上看还是很快
-优化方向是创建一个和进程同尺寸FridaLoader池, 在该池里new, 每个进程分配池中对应位置的FridaLoader, 不回收FridaLoader(不预设程序结束目标,用户按ctrl+c来结束)
+上一个版本是每个进程分配一个FridaLoader, 但是这样会导致每个进程都要重新附加, 会比较慢, 当然, 进程够多, 无所谓FridaLoader的new速度了, 整体上看还是很快
+目前是创建一个和进程同尺寸FridaLoader池, 在该池里new, 每个进程分配池中对应位置的FridaLoader, 不回收FridaLoader(不预设程序结束目标,用户按ctrl+c来结束)
+
+尽可能减少不必要的print, 但不要尝试异步print, 以便降低后续跟踪执行情况
 """
 
 

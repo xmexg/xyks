@@ -1,9 +1,8 @@
 # 只适配了比大小口算pk, 其他未测试
 import argparse
+import concurrent.futures
 
 from answer import Student
-import concurrent.futures
-import time
 
 """
 使用多少进程, 数值太高会卡

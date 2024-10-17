@@ -1,0 +1,4 @@
+frida~=16.5.5
+urllib3~=2.2.2
+requests~=2.32.3
+termcolor~=2.5.0
