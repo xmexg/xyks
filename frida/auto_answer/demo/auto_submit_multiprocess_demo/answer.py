@@ -124,7 +124,7 @@ class Student:
         answer_json = match_question_json["examVO"]
         answer_json["questionCnt"] = answer_json["questionCnt"] * q_magn
         answer_json["correctCnt"] = answer_json["questionCnt"]
-        answer_json["costTime"] = 100
+        answer_json["costTime"] = answer_json["questionCnt"] * 0.2 + q_magn  # 增加答题用时,详见https://github.com/xmexg/xyks/issues/50
         answer_json["updatedTime"] = int(time.time() * 1000)
         perpare_answer_questions = answer_json["questions"]  # 存下原有的试题模板
         answer_json["questions"] = []  # 清空试题
