@@ -149,7 +149,7 @@ class Student:
         print(colored("生成答案: ", 'red') + answer_data)
         
         # 每道题暂停0.2秒, 外加`试题倍率`秒, 详见 https://github.com/xmexg/xyks/issues/50
-        time.sleep(answer_json["questionCnt"] * 0.2 + q_magn)
+        # time.sleep(answer_json["questionCnt"] * 0.2 + q_magn)
 
         """
         提交答案部分
